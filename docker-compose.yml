@@ -1,0 +1,59 @@
+version: '3'
+volumes:
+  db_data:
+services:
+  app:
+    build:
+      context: .
+    image: guoxiangke/xchurch
+    restart: unless-stopped
+    ports:
+      - "9002:80"
+    links:
+      - "db"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    environment:
+      CONTAINER_ROLE: app
+  #MySQL Service
+  db:
+    image: mysql:latest
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--default-authentication-plugin=mysql_native_password']
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/mysql
+      - /tmp:/sql
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+  redis:
+    image: redis:latest
+    restart: always
+
+  scheduler:
+    image: guoxiangke/xchurch
+    restart: always
+    links:
+      - "db"
+    depends_on:
+      - app
+    links:
+      - redis
+    volumes:
+      - ./:/var/www/html
+    environment:
+      CONTAINER_ROLE: scheduler
+  queue:
+    image: guoxiangke/xchurch
+    restart: always
+    links:
+      - "db"
+    depends_on:
+      - app
+    links:
+      - redis
+    volumes:
+      - ./:/var/www/html
+    environment:
+      CONTAINER_ROLE: queue
