@@ -10,6 +10,7 @@
         "laravel/framework": "^9.19",
         "laravel/horizon": "^5.10",
         "laravel/jetstream": "^2.12",
+        "laravel/nova": "~4.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.5",
@@ -27,6 +28,12 @@
         "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./nova"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",
