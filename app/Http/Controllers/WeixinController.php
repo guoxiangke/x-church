@@ -78,7 +78,7 @@ class WeixinController extends Controller
         }
         // 是否绑定个人微信
         if(!$social->wxid){
-            return Redirect::intended('weixin.bind');
+            return Redirect::intended('user/weixin/bind');
         }
         return Redirect::intended('dashboard');
     }
