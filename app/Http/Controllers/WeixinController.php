@@ -31,7 +31,7 @@ class WeixinController extends Controller
         $avatar = $socialUser->avatar;
         if($loginedId){
             //用户已登录，执行绑定！
-            Social::firstOrCreate([
+            $social = Social::firstOrCreate([
                 'social_id' => $socialUser->id,
                 'user_id'   => $loginedId,
                 'type'      => $type,
@@ -76,6 +76,18 @@ class WeixinController extends Controller
             //执行登录！
             Auth::loginUsingId($social->user_id, true);//自动登入！
         }
+        // 是否绑定个人微信
+        if(!$social->wxid){
+            return Redirect::intended('weixin.bind');
+        }
         return Redirect::intended('dashboard');
     }
+
+    // 绑定AI微信机器人
+    public function bindAI(Request $request){
+        $bindUserId = auth()->id();
+        //请发送 ghxxx 给 xxx机器人
+        return Social::where('user_id', $bindUserId)->get()->toArray();
+    }
+    
 }

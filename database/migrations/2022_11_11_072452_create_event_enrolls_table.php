@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('event_enrolls', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
+            $table->foreignId('user_id');
+            $table->foreignId('event_id');// is_need_check_out
+            // $table->date('checkin_at')->comment('签入时间'); == created_at
+            $table->date('checkout_at')->nullable()->comment('签出时间');
+            $table->string('remark')->nullable()->comment('留言备注');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('event_enrolls');
     }
 };

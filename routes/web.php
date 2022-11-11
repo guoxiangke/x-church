@@ -26,6 +26,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // 1.必须是登陆的
+    // 2.返回gh_xxx 给用户回复给AI机器人
+    Route::get('/user/weixin/bind',  [WeixinController::class, 'bindAI'])->name('weixin.bind');
 });
 
 Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name('login.weixin');
