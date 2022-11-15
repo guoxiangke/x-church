@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+// EventEnroll::truncate()
 return new class extends Migration
 {
     /**
@@ -16,9 +16,13 @@ return new class extends Migration
         Schema::create('event_enrolls', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('event_id');// is_need_check_out
-            // $table->date('checkin_at')->comment('签入时间'); == created_at
-            $table->date('checkout_at')->nullable()->comment('签出时间');
+            $table->foreignId('event_id');
+            // 同时，也可以找出 所有 该 service 的 所有会员。以供double-check0in
+            $table->foreignId('service_id')->nullable()->comment('如果一个event属于services的话');
+            $table->date('enrolled_at')->comment('报名时间');
+            $table->date('double_checked_at')->nullable()->comment('确认时间');
+            $table->date('checked_in_at')->nullable()->comment('签入时间');
+            $table->date('checked_out_at')->nullable()->comment('签出时间');
             $table->string('remark')->nullable()->comment('留言备注');
             $table->softDeletes();
             $table->timestamps();

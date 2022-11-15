@@ -26,7 +26,10 @@ return new class extends Migration
             $table->timestamps();
             // add 唯一索引在 social_id + type //确保一个用户在一个平台唯一绑定
             $table->unique(['social_id', 'type']);
+            // 个人weixin号，和gh绑定后，更新
             $table->string('weixin')->nullable()->index();
+            // 绑定手机后，可以用来登陆
+            $table->string('telephone', 22)->index()->comment('with(+1)');
         });
     }
 

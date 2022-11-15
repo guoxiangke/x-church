@@ -127,6 +127,8 @@ abstract class Value extends RangedMetric
 
         $column = $column ?? $query->getModel()->getQualifiedKeyName();
 
+        \Illuminate\Support\Facades\Log::error(__CLASS__, [$function, $column, $dateColumn, with(clone $query)->{$function}($column)]);
+        
         if ($request->range === 'ALL') {
             return $this->result(
                 round(

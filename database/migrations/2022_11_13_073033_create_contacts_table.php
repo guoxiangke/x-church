@@ -13,23 +13,27 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('church_contacts', function (Blueprint $table) {
+        // == profiles
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('church_id')->nullable()->comment('所属教会');
-            $table->foreignId('user_id')->nullable()->comment('教会成员，可以为空，即没有登记为系统用户');
+            $table->foreignId('organization_id')->nullable()->comment('所属组织');
+            // '可以为空，即没有登记为系统用户'
+            //TODO 如何确定 contact 和 user 的关系？用手机号sms验证？
+            $table->foreignId('user_id')->nullable()->comment();
+            $table->string('name_last')->nullable()->comment('姓');
+            $table->string('name_first')->nullable()->comment('名');// 'name' = name_last + name_first
             $table->string('name_en')->nullable()->comment('英文名');
-            $table->string('name_last')->nullable()->comment('中文姓');
-            $table->string('name_first')->nullable()->comment('中文名');// 'name' = name_last + name_first
             $table->boolean('sex')->default(0);
             $table->date('birthday')->nullable();
+            //TODO 这里的手机号，用来确定 和 user 的关系，但需要sms验证
             $table->string('telephone', 22)->index()->comment('with(+1)');
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->date('date_join')->nullable();
-            $table->date('date_baptized')->nullable();
-            $table->boolean('is_married')->default(0)->comment('0单身');
-            $table->foreignId('reference_id')->nullable()->comment('引荐人：已登记的本教会成员');//reference_church_contact_id
+            
+            $table->foreignId('reference_id')->nullable()->comment('引荐人：已登记的本组织成员');//reference_church_contact_id
             $table->string('remark')->nullable()->comment('备注');
+            $table->boolean('status')->default(1)->comment('会员状态：active，inactive');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -42,6 +46,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('church_contacts');
+        Schema::dropIfExists('contacts');
     }
 };

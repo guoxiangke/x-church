@@ -5,16 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Models\Church;
 use App\Models\Social;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Cookie;
 
 
 class WeixinController extends Controller
 {
-    public function weixin(){
+    public function weixin(Request $request){
+        $churchId = $request->query('church')?:1;
+        $minutes = 120;
+        Cookie::queue('churchId', $churchId, $minutes);
         return Socialite::driver('weixin')->redirect();
     }
 
@@ -76,18 +81,33 @@ class WeixinController extends Controller
             //执行登录！
             Auth::loginUsingId($social->user_id, true);//自动登入！
         }
-        // 是否绑定个人微信
-        if(!$social->wxid){
-            return Redirect::intended('user/weixin/bind');
-        }
-        return Redirect::intended('dashboard');
+
+        // 登陆成功，跳转登陆之前的页面。
+            // check-in页面
+            // Welcome 到xxx，
+                // 0.继续签到/报名/，报名/check-in成功！
+                // 1.我是新人，点此加牧师微信
+                // 2.我是会员，点击更新资料（）
+
+
+        // // 是否绑定个人微信
+        // if(!$social->weixin){
+        //     // return Redirect::intended('user/weixin/bind');
+        //     return redirect()->route('weixin.bind');
+        // }
+        // return Redirect::intended('dashboard');
     }
 
     // 绑定AI微信机器人
     public function bindAI(Request $request){
+        //TODO: get church from cookie!!
+        $churchId = $request->cookie('churchId')?:1;
+        $church = Church::find($churchId);
         $bindUserId = auth()->id();
-        //请发送 ghxxx 给 xxx机器人
-        return Social::where('user_id', $bindUserId)->get()->toArray();
+        // 1.
+        // 2.请发送 social_id 给 xxx机器人 oH16Q5hX4-75CyIPAvXpNr7I4PXo 
+        $socialId = Social::where('user_id', $bindUserId)->first()->social_id;
+        return view('bind',['socialId'=>$socialId, 'church'=>$church]);
     }
     
 }

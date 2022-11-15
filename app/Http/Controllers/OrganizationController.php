@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreChurchRequest;
-use App\Http\Requests\UpdateChurchRequest;
-use App\Models\Church;
+use App\Http\Requests\StoreOrganizationRequest;
+use App\Http\Requests\UpdateOrganizationRequest;
+use App\Models\Organization;
 
-class ChurchController extends Controller
+class OrganizationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class ChurchController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreChurchRequest  $request
+     * @param  \App\Http\Requests\StoreOrganizationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreChurchRequest $request)
+    public function store(StoreOrganizationRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class ChurchController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Church  $church
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function show(Church $church)
+    public function show(Organization $organization)
     {
         //
     }
@@ -53,10 +53,10 @@ class ChurchController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Church  $church
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function edit(Church $church)
+    public function edit(Organization $organization)
     {
         //
     }
@@ -64,11 +64,11 @@ class ChurchController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateChurchRequest  $request
-     * @param  \App\Models\Church  $church
+     * @param  \App\Http\Requests\UpdateOrganizationRequest  $request
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateChurchRequest $request, Church $church)
+    public function update(UpdateOrganizationRequest $request, Organization $organization)
     {
         //
     }
@@ -76,10 +76,10 @@ class ChurchController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Church  $church
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Church $church)
+    public function destroy(Organization $organization)
     {
         //
     }

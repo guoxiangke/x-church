@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ChurchContact;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ChurchContactPolicy
+class OrganizationPolicy
 {
     use HandlesAuthorization;
 
@@ -18,17 +18,17 @@ class ChurchContactPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return 1;//$user->id === 1;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, ChurchContact $churchContact)
+    public function view(User $user, Organization $organization)
     {
         //
     }
@@ -48,22 +48,22 @@ class ChurchContactPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, ChurchContact $churchContact)
+    public function update(User $user, Organization $organization)
     {
-        //
+        return 1;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, ChurchContact $churchContact)
+    public function delete(User $user, Organization $organization)
     {
         //
     }
@@ -72,10 +72,10 @@ class ChurchContactPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, ChurchContact $churchContact)
+    public function restore(User $user, Organization $organization)
     {
         //
     }
@@ -84,10 +84,10 @@ class ChurchContactPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, ChurchContact $churchContact)
+    public function forceDelete(User $user, Organization $organization)
     {
         //
     }

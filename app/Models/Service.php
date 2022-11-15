@@ -13,5 +13,16 @@ class Service extends Model
     use Metable;
     use SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at',
+        'begin_at',
+    ];
+
+
+    public function events(){
+        return $this->hasMany(Event::class);
+    }
+
+    public function organization(){
+        return $this->belongsTo(Organization::class);
+    }
 }

@@ -18,7 +18,7 @@ class EventPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -30,7 +30,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,7 +41,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -53,7 +53,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        //
+        return true;
     }
 
     /**

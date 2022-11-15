@@ -26,4 +26,5 @@ yarn-error.log
 /public/js/
 /public/mix-manifest.json
 /storage/debugbar/
-
+sftp-config.json
+docs.md

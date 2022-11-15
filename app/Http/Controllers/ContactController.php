@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreChurchContactRequest;
-use App\Http\Requests\UpdateChurchContactRequest;
-use App\Models\ChurchContact;
+use App\Http\Requests\StoreContactRequest;
+use App\Http\Requests\UpdateContactRequest;
+use App\Models\Contact;
 
-class ChurchContactController extends Controller
+class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,10 +31,10 @@ class ChurchContactController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreChurchContactRequest  $request
+     * @param  \App\Http\Requests\StoreContactRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreChurchContactRequest $request)
+    public function store(StoreContactRequest $request)
     {
         //
     }
@@ -42,10 +42,10 @@ class ChurchContactController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function show(ChurchContact $churchContact)
+    public function show(Contact $contact)
     {
         //
     }
@@ -53,10 +53,10 @@ class ChurchContactController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function edit(ChurchContact $churchContact)
+    public function edit(Contact $contact)
     {
         //
     }
@@ -64,11 +64,11 @@ class ChurchContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateChurchContactRequest  $request
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Http\Requests\UpdateContactRequest  $request
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateChurchContactRequest $request, ChurchContact $churchContact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
         //
     }
@@ -76,10 +76,10 @@ class ChurchContactController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ChurchContact  $churchContact
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ChurchContact $churchContact)
+    public function destroy(Contact $contact)
     {
         //
     }

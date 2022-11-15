@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use App\Models\Church;
+use Illuminate\Http\Request;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -16,6 +18,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+        if(auth()->id()){
+            Nova::userTimezone(function (Request $request) {
+                return $request->user()->timezone;
+            });
+        }
     }
 
     /**
@@ -41,7 +48,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            return $user->id ===1;
+            //1.church Owner can access nova.
+            //TODO 2.with church admin role user.
+
+            return true;//$user->id === 1 || in_array($user->id, Church::pluck('user_id')->toArray());
             return in_array($user->email, [
                 //
             ]);
