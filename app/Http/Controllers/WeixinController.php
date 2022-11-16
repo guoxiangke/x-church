@@ -78,6 +78,10 @@ class WeixinController extends Controller
             //执行登录！
             Auth::loginUsingId($social->user_id, true);//自动登入！
         }
+
+        $eventId = request()->cookie('eventId')?:1;
+        return redirect()->route('event.checkin', $eventId);
+        // return Redirect::intended('dashboard');
     }
 
     // 绑定AI微信机器人

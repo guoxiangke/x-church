@@ -29,7 +29,7 @@ return new class extends Migration
             // 个人weixin号，和gh绑定后，更新
             $table->string('weixin')->nullable()->index();
             // 绑定手机后，可以用来登陆
-            $table->string('telephone', 22)->index()->comment('with(+1)');
+            $table->string('telephone', 22)->nullable()->index()->comment('with(+1)');
         });
     }
 
