@@ -61,5 +61,7 @@ Route::middleware([
 });
 
 // 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面
-Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name('login.weixin');
+$isLocal = app()->environment('local');
+$loginNameByEnv = $isLocal?'login.weixin':'login';
+Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name($loginNameByEnv);
 Route::get('/login/wechat/callback', [WeixinController::class, 'weixinlogin'])->name('login.weixin.callback');

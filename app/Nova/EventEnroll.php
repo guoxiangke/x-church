@@ -51,6 +51,7 @@ class EventEnroll extends Resource
             DateTime::make('double_checked_at'),
             DateTime::make('checked_in_at'),
             DateTime::make('checked_out_at'),
+            DateTime::make('canceled_at'),
             Text::make('remark')->hideFromIndex(),
         ];
     }
