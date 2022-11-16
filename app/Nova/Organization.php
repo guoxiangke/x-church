@@ -57,6 +57,7 @@ class Organization extends Resource
             DateTime::make('birthday')->rules('required', 'string', 'max:255'),
             Text::make('introduce')->rules('required', 'string', 'max:255'),
             Text::make('contact_fields')->rules('required', 'string', 'max:255'),
+            Text::make('wechat_qr_url'),
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Event;
 use App\Models\EventEnroll;
 use App\Models\Service;
@@ -47,11 +48,15 @@ class CheckInController extends Controller
         
         $user = auth()->user();
         $userId = $user->id;
-        $social = Social::where('user_id', $userId)->first();
+        $social = Social::where('user_id', $userId)->first(); //todo Add OrFail()
         $socialId = $social?$social->id:'None';
-        $organization = $event->organization->name_cn;
+        // 随机生成6位数字，30s内过期，以便绑定 user1:social1
+        $bindInfo = "{$userId}:{$socialId}";
+        $code6 = (int)substr(now()->valueOf(), -6) - $userId;
+        Cache::put($code6, $bindInfo, 60);
+        $organization = $event->organization;
         $isBind = false; //TODO 是否绑定
-        $data = compact('socialId','organization','user','isBind');
+        $data = compact('code6','organization','user','isBind', 'event');
 
 
         $eventEnroll = EventEnroll::firstWhere([
@@ -72,14 +77,13 @@ class CheckInController extends Controller
                 return view('check-in',array_merge($data,[
                     'success' => true,
                     'title' => '签出成功',
-                    'message' => '记得下次早点check-out哦！'
+                    'message' => '下次记得早点check-out哦！'
                 ]));
         }
         // 结束后，不可以check in'
         if(now() > $event->begin_at->addHours($event->duration_hours)){
             return view('check-in',array_merge($data,[
                 'success' => false,
-                'socialId' =>$socialId,
                 'title' => '签到失败',
                 'message' => '很抱歉，活动已结束，下次记得早点来哦！'
             ]));
@@ -100,8 +104,9 @@ class CheckInController extends Controller
                 // 早于3个小时，为报名阶段，而不是check-in
                 return view('check-in', array_merge($data,[
                     'success' => true,
-                    'title' => '登记成功',
-                    'message' => '感谢您报名参与，我们将会在开始前？小时提醒您现场扫码签到'
+                    'title' => '报名成功',
+                    'enrollId' => $eventEnroll->id,
+                    'message' => "感谢参与，我们将会在开始前{$event->check_in_ahead}分钟提醒您现场扫码签到?几个人TODO",
                 ]));
             }
 
@@ -112,15 +117,14 @@ class CheckInController extends Controller
                 // 3个小时开始 到结束前，都可以check-in
                 return view('check-in', array_merge($data,[
                     'success' => true,
-                    'title' => '签到成功1',
-                    'message' => '很抱歉，活动已结束，下次记得早点来哦！'
+                    'title' => '签到成功',
+                    'message' => '1？几个人'
                 ]));
                 // 必须是扫码（动态：防止作弊，需要每周打印？/静态，省事儿）
             }
 
             return view('check-in', array_merge($data,[
                 'success' => false,
-                'socialId' =>$socialId,
                 'title' => 'Unknown Error',
                 'message' => 'xxx?'
             ]));
@@ -135,7 +139,8 @@ class CheckInController extends Controller
                 // 3个小时开始 到结束前，都可以check-in
                 return view('check-in', array_merge($data,[
                     'success' => true,
-                    'title' => '签到成功2',
+                    'title' => '签到成功',
+                    'enrollId' => $eventEnroll->id,
                     'message' => ''
                 ]));
                 // 必须是扫码（动态：防止作弊，需要每周打印？/静态，省事儿）
@@ -145,15 +150,17 @@ class CheckInController extends Controller
 
                 return view('check-in', array_merge($data,[
                     'success' => false,
-                    'title' => '签到失败2',
-                    'message' => '还没到签到时间，请在耐心等待，并在规定时间内签到'
+                    'title' => '签到失败',
+                    'enrollId' => $eventEnroll->id,
+                    'message' => "还没到签到时间，请在耐心等待，并提前{$event->check_in_ahead}分钟内签到"
                 ]));
             }
 
             return view('check-in', array_merge($data,[
                 'success' => true,
+                'enrollId' => $eventEnroll->id,
                 'title' => '签到已成功',
-                'message' => '无需重复签到扫码！'
+                'message' => '无需重复签到'
             ]));
         }
     }

@@ -24,28 +24,52 @@
 		        <div class="weui-msg__icon-area"><i class="weui-icon-{{$success?'success':'warn'}}  weui-icon_msg"></i></div>
 		        <div class="weui-msg__text-area">
 		            <h2 class="weui-msg__title">{{$title}}</h2>
-		            <p class="weui-msg__desc">{{$message}}<a class="weui-wa-hotarea weui-link" href="{{ route('weixin.bind') }}">绑定操作</a></p>
+		            <p class="weui-msg__desc">{{$message}}
+		            	@if(isset($enrollId))
+		            	<br/>
+		            	<a class="weui-wa-hotarea weui-link" href="/event_enrolls/{{$enrollId}}/cancel">取消报名？</a></p>
+		            	@endif
+		            </p>
 
+		            @if(!$isBind)
 		            <div class="weui-msg__custom-area">
 		              <ul class="weui-form-preview__list">
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">姓名</label><p class="weui-form-preview__value">{{$user->name}}</p></li>
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">绑定ID</label><p class="weui-form-preview__value">{{$socialId}}</p></li>
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">微信号</label><p class="weui-form-preview__value">{{$isBind?'isBind':'false'}}</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">微信号</label><p class="weui-form-preview__value">未绑定</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">绑定码</label><p class="weui-form-preview__value">{{$code6}}</p></li>
 		              </ul>
 		            </div>
+		            @endif
+
+		            @if($isBind && $success)
+		            <div class="weui-msg__custom-area">
+		              <ul class="weui-form-preview__list">
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">名称</label><p class="weui-form-preview__value">{{$event->name}}</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("D M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("D M j H:i")}}</p></li>
+		              </ul>
+		            </div>
+		            @endif
 		        </div>
+		        @if(!$isBind)
 		        <div class="weui-msg__opr-area">
 		            <p class="weui-btn-area">
-		                <a href="{{ route('weixin.bind') }}" role="button" class="weui-btn weui-btn_primary">加牧师微信</a>
+		                <a href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_primary">牧师微信</a>
 		            </p>
 		        </div>
 		        <div class="weui-msg__tips-area">
-		          <p class="weui-msg__tips">请复制 绑定ID 发送给您的牧师，完成绑定操作。<a class="weui-wa-hotarea weui-link" href="javascript:">操作视频</a></p>
+		          <p class="weui-msg__tips">请复制本段信息 {{$code6}} 发送到牧师微信，获取活动详情、通知提醒、导航信息。此码60s内有效</p>
 		        </div>
+		        @endif
+		        @if(isset($enrollId))
+		        <div class="weui-msg__opr-area">
+		            <p class="weui-btn-area">
+		                <a href="http://maps.google.com/maps?q={{$event->address}}" role="button" class="weui-btn weui-btn_primary">导航🧭</a>
+		            </p>
+		        </div>
+		        @endif
 		        <div class="weui-msg__extra-area">
 		            <div class="weui-footer">
 		                <p class="weui-footer__links">
-		                    <a href="javascript:" class="weui-wa-hotarea weui-footer__link">{{$organization}}活动签到管理系统</a>
+		                    <a href="javascript:" class="weui-wa-hotarea weui-footer__link">{{$organization->name_cn}}活动签到管理系统</a>
 		                </p>
 		                <p class="weui-footer__text">Copyright &copy; 2008-2016 yilindeli.com</p>
 		            </div>
