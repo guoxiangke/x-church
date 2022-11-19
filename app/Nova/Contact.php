@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Metrics\NewContacts;
 use App\Nova\Metrics\ContactsPerDay;
@@ -13,12 +14,10 @@ use App\Nova\Metrics\ContactsPerMonth;
 
 class Contact extends Resource
 {
-    // 限制当前用户的
+    // 限制当前用户的 // 必须是church owner
     public static function indexQuery(NovaRequest $request, $query)
     {
-        //$request->user()->id
-        // 必须是church owner
-        $id = \App\Models\Organization::where('user_id', $request->user()->id)->firstOrFail()->id;
+        $id = \App\Models\Organization::where('user_id', $request->user()->id)->orderBy('created_at','desc')->first()->id;
         return $query->where('organization_id', $id);
     }
 
@@ -34,7 +33,7 @@ class Contact extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -42,7 +41,7 @@ class Contact extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
@@ -55,9 +54,9 @@ class Contact extends Resource
     {
         return [
             ID::make()->sortable(),
+            BelongsTo::make('organization')->rules('required'),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
-            Text::make('name_last')->rules('required', 'string', 'max:255'),
-            Text::make('name_first')->rules('required', 'string', 'max:255'),
+            Text::make('name')->rules('required', 'string', 'max:255'),
             Text::make('sex')->rules('required', 'string', 'max:255'),
             DateTime::make('birthday')->rules('required', 'string', 'max:255'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),

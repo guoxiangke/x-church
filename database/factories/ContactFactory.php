@@ -19,10 +19,9 @@ class ContactFactory extends Factory
     {
         $date = fake()->dateTimeBetween('-30 days', '-1 days');
         return [
-            'organization_id' => 2,
+            'organization_id' => 1,
             'user_id' => User::factory()->create()->id, //教会成员，可以为空，即没有登记为系统用户
-            'name_last'=> fake()->lastName(),
-            'name_first'=> fake()->firstNameMale(),
+            'name'=> fake()->lastName(),
             'name_en'=> fake()->name,
             'sex' => fake()->boolean(),
             'birthday' => now(),

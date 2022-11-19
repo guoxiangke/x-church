@@ -13,7 +13,10 @@ class Contact extends Model
     use Metable;
     use SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at',
+        'date_join',
+        'birthday',
+    ];
 
     public function organization(){
         return $this->belongsTo(Organization::class);

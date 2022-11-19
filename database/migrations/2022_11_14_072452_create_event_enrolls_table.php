@@ -26,8 +26,10 @@ return new class extends Migration
             // Event开始后，不可以取消报名
             // Event开始前X小时，才可以取消报名
             $table->date('canceled_at')->nullable()->comment('取消报名需要提前的时间');
-            
             $table->string('remark')->nullable()->comment('留言备注');
+            // 携带家眷 $event->is_multi_enroll
+            $table->unsignedTinyInteger('count_adult')->default(1)->comment('几个成人');
+            $table->unsignedTinyInteger('count_child')->default(0)->comment('几个儿童');
             $table->softDeletes();
             $table->timestamps();
         });

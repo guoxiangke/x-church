@@ -20,14 +20,14 @@ return new class extends Migration
             // '可以为空，即没有登记为系统用户'
             //TODO 如何确定 contact 和 user 的关系？用手机号sms验证？
             $table->foreignId('user_id')->nullable()->comment();
-            $table->string('name_last')->nullable()->comment('姓');
-            $table->string('name_first')->nullable()->comment('名');// 'name' = name_last + name_first
-            $table->string('name_en')->nullable()->comment('英文名');
+            $table->string('name')->nullable()->index()->comment('姓名');
+            $table->string('name_en')->nullable()->index()->comment('英文名');
             $table->boolean('sex')->default(0);
             $table->date('birthday')->nullable();
-            //TODO 这里的手机号，用来确定 和 user 的关系，但需要sms验证
+            // 用户/管理员 输入的手机号和邮箱，信息不可靠！
             $table->string('telephone', 22)->index()->comment('with(+1)');
-            $table->string('email')->nullable();
+            $table->string('email')->nullable()->index();
+
             $table->string('address')->nullable();
             $table->date('date_join')->nullable();
             

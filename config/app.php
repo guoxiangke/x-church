@@ -70,8 +70,8 @@ return [
     */
 
     // 'timezone' => 'UTC',
-    'timezone' => 'Asia/Hong_Kong',
-    // 'timezone' => 'America/Los_Angeles',
+    // 'timezone' => 'Asia/Hong_Kong',
+    'timezone' => 'America/Los_Angeles',
 
     /*
     |--------------------------------------------------------------------------

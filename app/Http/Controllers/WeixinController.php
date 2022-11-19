@@ -84,16 +84,54 @@ class WeixinController extends Controller
         // return Redirect::intended('dashboard');
     }
 
-    // 绑定AI微信机器人
-    public function bindAI(Request $request){
-        //TODO: get church from cookie!!
-        $organizationId = $request->cookie('organizationId')?:1;
-        $organization = Organization::find($organizationId);
-        $bindUserId = auth()->id();
-        // 1.
-        // 2.请发送 social_id 给 xxx机器人 oH16Q5hX4-75CyIPAvXpNr7I4PXo 
-        $socialId = Social::where('user_id', $bindUserId)->firstOrFail()->social_id;
-        return view('bind', ['socialId'=>$socialId, 'organization'=>$organization]);
+
+    public function xbotResponse(Request $request)
+    {
+        // 验证消息
+        if(!isset($request['msgid']) || $request['self'] == true)  return response()->json(null);
+
+        $wxidOrCurrentRoom = $request['wxid'];
+        $isRoom = Str::endsWith($wxidOrCurrentRoom, '@chatroom');
+        // personal
+        $wxid = $wxidOrCurrentRoom;
+        $remark = Str::replace("\n", '', $request['remark']);
+        if($isRoom){
+             $wxid = $request['from'];
+             $remark = $request['from_remark'];
+        }
+        // $cache = Cache::tags($wxid);
+
+        $keyword = $request['content'];
+
+        if(!$isRoom){
+            if( strlen($keyword) === 6 //6位绑定验证码
+                && preg_match("/\d{6}/", $keyword)){
+                if( $caches = Cache::pull($keyword)){
+                    Social::find($caches['social_id'])->update([
+                        'wxid' => $wxid,
+                        'nickname' => $remark,
+                    ]);
+                    $contact = Contact::firstOrCreate($caches);//compact('social_id','organization_id','user_id')
+                    $content = "恭喜你绑定成功！点此更新联系人信息";//$contact->link
+                    return app(Xbot::class)->send($content, $wxid);
+                    // 恭喜你绑定成功！点此更新联系人信息 $contact->link
+                }else{
+                    $content = "验证码已过期或无效，请重新扫码绑定";//$contact->link
+                    return app(Xbot::class)->send($content, $wxid);
+                }
+            }
+        }
+        // // 查找或存储用户
+        // $customer = Social::first(['wxid'=> $wxid]); // "wxid":"bluesky_still","remark":"AI天空蔚蓝"
+
+        // // 更新用户的备注
+        // if($customer->name !== $remark){
+        //     $customer->name = $remark;
+        //     // Saving A Single Model Without Events
+        //     $customer->saveQuietly();
+        // }
+
+
     }
     
 }

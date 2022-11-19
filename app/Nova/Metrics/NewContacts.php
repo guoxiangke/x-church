@@ -24,8 +24,8 @@ class NewContacts extends Value
     }
     public function filterByOrg($orgId=1)
     {
-        Log::error(__CLASS__,[$orgId]);
-        return $this->where('organization_id', $orgId);
+        // Log::error(__CLASS__,[$orgId]);
+        // return $this->where('organization_id', $orgId);
     }
 
     /**

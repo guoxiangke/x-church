@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('address')->nullable()->comment('地点');
             $table->string('rrule')->nullable()->comment('一次性活动？重复性活动');
             $table->boolean('is_need_check_out')->nullable()->comment('是否需要checkout：儿童service');
-            $table->unsignedSmallInteger('cancel_ahead_hours')->default(3)->comment('提前几小时，不可以取消报名');
+            $table->unsignedTinyInteger('cancel_ahead_hours')->default(3)->comment('提前几小时，不可以取消报名');
             $table->softDeletes();
             $table->timestamps();
         });

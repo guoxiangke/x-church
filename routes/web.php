@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WeixinController;
-use App\Http\Controllers\ChurchController;
+use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CheckInController;
+use App\Http\Controllers\EventEnrollController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+// 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面
+$isLocal = app()->environment('local');
+$loginNameByEnv = $isLocal?'login.weixin':'login';
+Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name($loginNameByEnv);
+Route::get('/login/wechat/callback', [WeixinController::class, 'weixinlogin'])->name('login.weixin.callback');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -31,16 +39,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    // 1.必须是登陆的
-    // 2.返回gh_xxx 给用户回复给AI机器人
-    Route::get('/user/weixin/bind',  [WeixinController::class, 'bindAI'])->name('weixin.bind');
-
-    Route::resources([
-        'churches'      => ChurchController::class,
-        'services'     => ServiceController::class,
-        'events'        => EventController::class,
-        // 'rrules' => 'RruleController', //except create!!! create from order
-    ]);
+    // Route::resources([
+    //     'organization'      => OrganizationController::class,
+    //     'services'     => ServiceController::class,
+    //     'events'        => EventController::class,
+    //     // 'rrules' => 'RruleController', //except create!!! create from order
+    // ]);
 
 
     // 1.报名 
@@ -58,10 +62,13 @@ Route::middleware([
         //3.如果是第三次扫码，则 checkout
     Route::get('/services/{service}/check-in-out',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
     Route::get('/events/{event}/check-in-out',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
-});
 
-// 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面
-$isLocal = app()->environment('local');
-$loginNameByEnv = $isLocal?'login.weixin':'login';
-Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name($loginNameByEnv);
-Route::get('/login/wechat/callback', [WeixinController::class, 'weixinlogin'])->name('login.weixin.callback');
+
+    // 报名人数更新 /event_enrolls/{{$enrollId}}/update
+    Route::get('/event_enrolls/{eventEnroll}/counts', [EventEnrollController::class, 'counts'])->name('event_enrolls.counts');
+    // 取消报名？ /event_enrolls/{{$enrollId}}/cancel
+    Route::get('/event_enrolls/{eventEnroll}/cancel', [EventEnrollController::class, 'cancel'])->name('event_enrolls.cancel');
+
+
+
+});

@@ -40,27 +40,34 @@ class CheckInController extends Controller
     // 其中1 和 3 可以省略。
     // 还可以外加一个 double-check
     protected function check(Event $event){
-        // cookie 设置 所属组织id，用来在绑定页面找到organization
-        // @see WeixinController->bindAI()
-        $organizationId = $event->organization_id;
-        Cookie::queue('organizationId', $organizationId, 30);
+        $organization_id = $event->organization_id;
 
-        
-        $user = auth()->user();
-        $userId = $user->id;
-        $social = Social::where('user_id', $userId)->first(); //todo Add OrFail()
-        $socialId = $social?$social->id:'None';
         // 随机生成6位数字，30s内过期，以便绑定 user1:social1
-        $bindInfo = "{$userId}:{$socialId}";
-        $code6 = (int)substr(now()->valueOf(), -6) - $userId;
-        Cache::put($code6, $bindInfo, 60);
+        $user = auth()->user();
+        $user_id = $user->id;
+        $social = Social::where('user_id', $user_id)->first();
+        // TODO 是否绑定
+        // $social = Social::where('user_id', $user_id)->firstOrFail();
+        // $social_id = $social->id;
+        $social_id = $social?$social->id:null;
+        // $isBind = $social->wxid;
+        $isBind = 1;
+        $code6 = '123456';
+        if(!$isBind) {
+            $code6 = (int)substr(now()->valueOf(), -6) - $user_id%100;
+            Cache::put($code6, compact('social_id','organization_id','user_id'), 60);
+        }
         $organization = $event->organization;
-        $isBind = false; //TODO 是否绑定
-        $data = compact('code6','organization','user','isBind', 'event');
-
+        $data = compact(
+            'event',
+            'organization',
+            'code6',
+            'isBind',
+            'social',//?
+        );
 
         $eventEnroll = EventEnroll::firstWhere([
-            'user_id' => $userId,
+            'user_id' => $user_id,
             'event_id' => $event->id,
         ]);
         // 结束后，不可以check in
@@ -76,6 +83,7 @@ class CheckInController extends Controller
                 $eventEnroll->save();
                 return view('check-in',array_merge($data,[
                     'success' => true,
+                    'status' => 0,
                     'title' => '签出成功',
                     'message' => '下次记得早点check-out哦！'
                 ]));
@@ -84,6 +92,7 @@ class CheckInController extends Controller
         if(now() > $event->begin_at->addHours($event->duration_hours)){
             return view('check-in',array_merge($data,[
                 'success' => false,
+                'status' => 1,
                 'title' => '签到失败',
                 'message' => '很抱歉，活动已结束，下次记得早点来哦！'
             ]));
@@ -105,8 +114,10 @@ class CheckInController extends Controller
                 return view('check-in', array_merge($data,[
                     'success' => true,
                     'title' => '报名成功',
+                    'status' => 2,
                     'enrollId' => $eventEnroll->id,
-                    'message' => "感谢参与，我们将会在开始前{$event->check_in_ahead}分钟提醒您现场扫码签到?几个人TODO",
+                    'message' => "",
+                    //感谢参与，我们将会在开始前{$event->check_in_ahead}分钟提醒您现场扫码签到?几个人TODO
                 ]));
             }
 
@@ -116,15 +127,18 @@ class CheckInController extends Controller
                 $eventEnroll->save();
                 // 3个小时开始 到结束前，都可以check-in
                 return view('check-in', array_merge($data,[
+                    'enrollId' => $eventEnroll->id,
                     'success' => true,
+                    'status' => 3,
                     'title' => '签到成功',
-                    'message' => '1？几个人'
+                    'message' => '',//TODO 是否show报名人数和最后/最新头像
                 ]));
                 // 必须是扫码（动态：防止作弊，需要每周打印？/静态，省事儿）
             }
 
             return view('check-in', array_merge($data,[
                 'success' => false,
+                'status' => 4,
                 'title' => 'Unknown Error',
                 'message' => 'xxx?'
             ]));
@@ -139,6 +153,7 @@ class CheckInController extends Controller
                 // 3个小时开始 到结束前，都可以check-in
                 return view('check-in', array_merge($data,[
                     'success' => true,
+                    'status' => 5,
                     'title' => '签到成功',
                     'enrollId' => $eventEnroll->id,
                     'message' => ''
@@ -150,17 +165,19 @@ class CheckInController extends Controller
 
                 return view('check-in', array_merge($data,[
                     'success' => false,
-                    'title' => '签到失败',
+                    'status' => 6,
+                    'title' => '签到未开放',
                     'enrollId' => $eventEnroll->id,
-                    'message' => "还没到签到时间，请在耐心等待，并提前{$event->check_in_ahead}分钟内签到"
+                    'message' => "请于开始前{$event->check_in_ahead}分钟签到"
                 ]));
             }
 
             return view('check-in', array_merge($data,[
                 'success' => true,
+                'status' => 7,
                 'enrollId' => $eventEnroll->id,
-                'title' => '签到已成功',
-                'message' => '无需重复签到'
+                'title' => '无需重复签到!',
+                'message' => ''
             ]));
         }
     }

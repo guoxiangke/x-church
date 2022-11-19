@@ -23,7 +23,7 @@ class Organization extends Resource
      *
      * @var string
      */
-    public static $title = 'name_cn';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -31,7 +31,7 @@ class Organization extends Resource
      * @var array
      */
     public static $search = [
-        'name_cn',
+        'name',
     ];
 
     /**
@@ -45,9 +45,10 @@ class Organization extends Resource
         return [
             ID::make()->sortable(),
             Text::make('user_id')->rules('required', 'string', 'max:255'),
-            Text::make('name_cn')->rules('required', 'string', 'max:255'),
+            Text::make('system_name')->rules('required', 'string', 'max:255'),
+            Text::make('name')->rules('required', 'string', 'max:255'),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
-            Text::make('name_cn_abbr')->rules('required', 'string', 'max:255'),
+            Text::make('name_abbr')->rules('required', 'string', 'max:255'),
             Text::make('name_en_abbr')->rules('required', 'string', 'max:255'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),

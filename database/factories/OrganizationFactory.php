@@ -19,9 +19,10 @@ class OrganizationFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create()->id,
-            'name_en' => "CHU-en-" . fake()->firstNameMale(),
-            'name_cn' => "CHU-cn-" . fake()->firstNameMale(),
-            'name_cn_abbr' => 'Abbr-cn-' . fake()->firstNameMale(),
+            'system_name' => "Sys-" . fake()->firstNameMale(),
+            'name' => "CHU-en-" . fake()->firstNameMale(),
+            'name_abbr' => 'Abbr-cn-' . fake()->firstNameMale(),
+            'name_en' => 'CHU-En-' . fake()->firstNameMale(),
             'name_en_abbr' => 'Abbr-en-' . fake()->firstNameMale(),
             'telephone' => '+1' . fake()->tollFreePhoneNumber(),
 

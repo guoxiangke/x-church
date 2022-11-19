@@ -8,6 +8,16 @@ use App\Models\EventEnroll;
 
 class EventEnrollController extends Controller
 {
+    
+    // show counts form to update counts
+    public function counts(EventEnroll $eventEnroll)
+    {
+         return view('event-counts-update', compact('eventEnroll'));
+    }
+    public function cancel(EventEnroll $eventEnroll)
+    {
+         return view('cancel-double-check', compact('eventEnroll'));
+    }
     /**
      * Display a listing of the resource.
      *

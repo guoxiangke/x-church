@@ -37,6 +37,11 @@ return [
         // 这一行配置非常重要，必须要写成这个地址。
         'auth_base_uri' => 'https://open.weixin.qq.com/connect/qrconnect',
     ],
+    
+    'xbot' => [
+        'endpoint' => env('XBOT_ENDPOINT'),
+        'token' => env('XBOT_TOKEN'),
+    ],
 
 
 ];
