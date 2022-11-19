@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('sex')->default(0);
             $table->date('birthday')->nullable();
             // 用户/管理员 输入的手机号和邮箱，信息不可靠！
-            $table->string('telephone', 22)->index()->comment('with(+1)');
+            $table->string('telephone', 22)->nullable()->index()->comment('with(+1)');
             $table->string('email')->nullable()->index();
 
             $table->string('address')->nullable();
