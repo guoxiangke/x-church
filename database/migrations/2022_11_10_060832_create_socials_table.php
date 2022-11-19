@@ -22,8 +22,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('type')->default(0); //0:wechat 1:github 2:facebook 3:psid
             $table->string('name')->nullable(); //公众号获取的微信昵称
             $table->string('avatar')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+
             // add 唯一索引在 social_id + type //确保一个用户在一个平台唯一绑定
             $table->unique(['social_id', 'type']);
             // 个人weixin号，和gh绑定后，更新
@@ -31,6 +30,9 @@ return new class extends Migration
             $table->string('nickname')->nullable()->index()->comment('微信姓名');//微信备注里的姓名
             // 绑定手机后，可以用来登陆
             $table->string('telephone', 22)->nullable()->index()->comment('with(+1)');
+            
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

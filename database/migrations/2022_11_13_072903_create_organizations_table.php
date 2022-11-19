@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('logo_url')->nullable()->comment('组织logo网址');
             $table->string('wechat_qr_url')->nullable()->comment('组织的AI机器人，扫码添加,如果为空，则使用AI机器人的');
             $table->string('wechat_ai_title')->default('管理员')->comment('管理员Title：牧师、教务长..');
-            $table->date('birthday')->nullable()->comment('组织成立时间');
+            $table->timestamp('birthday')->nullable()->comment('组织成立时间');
             $table->text('introduce')->nullable()->comment('组织简介');
             $table->string('contact_fields')->nullable()->comment('额外属性字段，需要收集的，英文;分割');
             $table->softDeletes();

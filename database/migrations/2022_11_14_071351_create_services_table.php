@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('name')->comment('名字');
             $table->text('description')->nullable()->comment('描述');
             $table->string('live_url')->nullable()->comment('直播链接');
-            $table->date('begin_at')->comment('开始时间');
+            $table->timestamp('begin_at')->comment('开始时间');
             $table->unsignedSmallInteger('check_in_ahead')->default(180)->comment('提前几分钟开始check-in？');
             $table->unsignedSmallInteger('duration_hours')->nullable()->comment('持续时间，为了checked_in截止时间');// 持续3天的活动？
             $table->string('address')->nullable()->comment('地点');

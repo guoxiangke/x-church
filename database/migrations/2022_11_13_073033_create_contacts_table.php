@@ -23,13 +23,13 @@ return new class extends Migration
             $table->string('name')->nullable()->index()->comment('姓名');
             $table->string('name_en')->nullable()->index()->comment('英文名');
             $table->boolean('sex')->default(0);
-            $table->date('birthday')->nullable();
+            $table->timestamp('birthday')->nullable();
             // 用户/管理员 输入的手机号和邮箱，信息不可靠！
             $table->string('telephone', 22)->nullable()->index()->comment('with(+1)');
             $table->string('email')->nullable()->index();
 
             $table->string('address')->nullable();
-            $table->date('date_join')->nullable();
+            $table->timestamp('date_join')->nullable();
             
             $table->foreignId('reference_id')->nullable()->comment('引荐人：已登记的本组织成员');//reference_church_contact_id
             $table->string('remark')->nullable()->comment('备注');
