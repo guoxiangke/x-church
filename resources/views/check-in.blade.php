@@ -24,11 +24,11 @@
 			        </div>
 			        <div class="weui-msg__opr-area">
 			            <p class="weui-btn-area">
-			                <a href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_primary">{{$code6}}</a>
+			                <a href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_primary">{{$organization->wechat_ai_title??'AI助理'}}微信</a>
 			            </p>
 			        </div>
 			        <div class="weui-msg__tips-area">
-			          <p class="weui-msg__tips">请发送 {{$code6}} 到[{{$organization->wechat_ai_title??'AI助理'}}]的微信即可<br/>此验证码60s内有效！</p>
+			          <p class="weui-msg__tips">请微信发送 <span style="font-size: 24px">{{$code6}}</span>  ⬆️给{{$organization->wechat_ai_title??'AI助理'}}<br/>此验证码60s内有效！</p>
 			        </div>
 			        @endif
 
