@@ -46,12 +46,15 @@ class CheckInController extends Controller
         $user = auth()->user();
         $user_id = $user->id;
         $social = Social::where('user_id', $user_id)->first();
-        // TODO 是否绑定
-        // $social = Social::where('user_id', $user_id)->firstOrFail();
-        // $social_id = $social->id;
-        $social_id = $social?$social->id:null;
-        // $isBind = $social->wxid;
-        $isBind = 1;
+        if($user_id == 1){
+            // TODO 是否绑定
+            $social_id = $social?$social->id:null;
+            $isBind = 1;
+        }else{
+            $social = Social::where('user_id', $user_id)->firstOrFail();
+            $social_id = $social->id;
+            $isBind = $social->wxid;
+        }
         $code6 = '123456';
         if(!$isBind) {
             $code6 = (int)substr(now()->valueOf(), -6) - $user_id%100;
