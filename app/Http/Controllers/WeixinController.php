@@ -82,9 +82,7 @@ class WeixinController extends Controller
             Auth::loginUsingId($social->user_id, true);//自动登入！
         }
 
-        $eventId = request()->cookie('eventId')?:1;
-        return redirect()->route('event.checkin', $eventId);
-        // return Redirect::intended('dashboard');
+        return Redirect::intended('dashboard');
     }
 
 

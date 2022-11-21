@@ -52,13 +52,13 @@ class Organization extends Resource
             Text::make('name_en_abbr')->rules('required', 'string', 'max:255'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),
-            Text::make('address')->rules('required', 'string', 'max:255'),
-            Text::make('website_url')->rules('required', 'string', 'max:255'),
-            Text::make('logo_url')->rules('required', 'string', 'max:255'),
+            Text::make('address')->rules('required', 'string', 'max:255')->hideFromIndex(),
+            Text::make('website_url')->rules('required', 'string', 'max:255')->hideFromIndex(),
+            Text::make('logo_url')->rules('required', 'string', 'max:255')->hideFromIndex(),
             DateTime::make('birthday')->rules('required', 'string', 'max:255'),
-            Text::make('introduce')->rules('required', 'string', 'max:255'),
-            Text::make('contact_fields')->rules('required', 'string', 'max:255'),
-            Text::make('wechat_qr_url'),
+            Text::make('introduce')->rules('required', 'string', 'max:255')->hideFromIndex(),
+            Text::make('contact_fields')->hideFromIndex(),
+            Text::make('wechat_qr_url')->hideFromIndex(),
         ];
     }
 

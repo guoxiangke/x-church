@@ -54,7 +54,7 @@ class Event extends Resource
         return [
             ID::make()->sortable(),
             BelongsTo::make('organization')->rules('required'),
-            BelongsTo::make('service'),
+            BelongsTo::make('service')->nullable(),
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('description')->hideFromIndex(),
             DateTime::make('begin_at'),

@@ -42,7 +42,7 @@
 		                	<span class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></span>
 		                @endif
 		                @if($event->is_need_remark)
-		                	<span class="weui-cells__tips showIOSDialog" id="showDialog2" ><a class="weui-link weui-wa-hotarea" href="javascript:">报名附言</a></span>
+		                <span class="" id="showDialog2" ><a class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea" href="javascript:">报名附言</a></span>
 		                @endif
 			        </div>
 			        @endif

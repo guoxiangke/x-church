@@ -54,7 +54,7 @@ class Service extends Resource
             Number::make('check_in_ahead'),
             Number::make('duration_hours'),
             Text::make('address')->hideFromIndex(),
-            Text::make('rrule'),
+            Text::make('rrule')->hideFromIndex(),
             Boolean::make('is_need_check_out'),
         ];
     }
