@@ -20,6 +20,7 @@ class OrganizationFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'system_name' => "Sys-" . fake()->firstNameMale(),
+            'wechat_ai_title' => 'CheckIn助手',
             'name' => "CHU-en-" . fake()->firstNameMale(),
             'name_abbr' => 'Abbr-cn-' . fake()->firstNameMale(),
             'name_en' => 'CHU-En-' . fake()->firstNameMale(),

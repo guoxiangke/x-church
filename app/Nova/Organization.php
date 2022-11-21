@@ -5,7 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 
@@ -45,19 +45,20 @@ class Organization extends Resource
         return [
             ID::make()->sortable(),
             Text::make('user_id')->rules('required', 'string', 'max:255'),
-            Text::make('system_name')->rules('required', 'string', 'max:255'),
             Text::make('name')->rules('required', 'string', 'max:255'),
-            Text::make('name_en')->rules('required', 'string', 'max:255'),
-            Text::make('name_abbr')->rules('required', 'string', 'max:255'),
-            Text::make('name_en_abbr')->rules('required', 'string', 'max:255'),
+            Text::make('name_en')->nullable(),
+            Text::make('name_abbr')->nullable(),
+            Text::make('name_en_abbr')->nullable(),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
-            Text::make('email')->rules('required', 'string', 'max:255'),
-            Text::make('address')->rules('required', 'string', 'max:255')->hideFromIndex(),
-            Text::make('website_url')->rules('required', 'string', 'max:255')->hideFromIndex(),
-            Text::make('logo_url')->rules('required', 'string', 'max:255')->hideFromIndex(),
-            DateTime::make('birthday')->rules('required', 'string', 'max:255'),
-            Text::make('introduce')->rules('required', 'string', 'max:255')->hideFromIndex(),
+            Text::make('email')->nullable(),
+            Text::make('address')->nullable()->hideFromIndex(),
+            Text::make('website_url')->nullable()->hideFromIndex(),
+            Text::make('logo_url')->nullable()->hideFromIndex(),
+            Date::make('birthday')->nullable(),
+            Text::make('introduce')->nullable()->hideFromIndex(),
             Text::make('contact_fields')->hideFromIndex(),
+            Text::make('system_name')->rules('required', 'string', 'max:255'),
+            Text::make('wechat_ai_title')->nullable(),
             Text::make('wechat_qr_url')->hideFromIndex(),
         ];
     }
