@@ -27,10 +27,10 @@ return new class extends Migration
             $table->string('address')->nullable()->comment('活動地点');
             $table->string('rrule')->nullable()->comment('一次性活动？重复性活动');
             $table->boolean('is_need_check_out')->nullable()->comment('是否需要checkout：儿童service');
-            $table->unsignedTinyInteger('cancel_ahead_hours')->default(3)->comment('提前几小时，不可以取消报名');
-            // 统计 吃饭人数，携带家眷？可以帮助家人报名。
-            $table->boolean('is_multi_enroll')->default(0)->comment('成人+儿童参，一人报名多人');
-            $table->boolean('is_need_remark')->default(0)->comment('报名时是否收集留言');
+            $table->unsignedTinyInteger('cancel_ahead_hours')->nullable()->comment('提前几小时，null关闭功能');
+            // 统计 吃饭人数，携带家眷？可以帮助家人报名
+            $table->boolean('is_multi_enroll')->nullable()->comment('成人+儿童参，一人报名多人，null关闭功能');
+            $table->boolean('is_need_remark')->nullable()->comment('报名时是否收集留言，null关闭功能');
             $table->softDeletes();
             $table->timestamps();
         });

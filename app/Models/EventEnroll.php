@@ -16,6 +16,7 @@ class EventEnroll extends Model
         'double_checked_at',
         'checked_in_at',
         'checked_out_at',
+        'canceled_at',
     ];
 
 
@@ -28,5 +29,22 @@ class EventEnroll extends Model
     // reference_id
     public function service(){
         return $this->belongsTo(Service::class);
+    }
+    public function cancel(){
+        $this->canceled_at = now();
+        return $this->save();
+    }
+
+    // 默认统计 without cancel，但显示时，要显示 canceled
+    // ： https://laravel.com/docs/9.x/eloquent#anonymous-global-scopes
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return void
+     */
+    public function scopeActive($query)
+    {
+        $query->whereNull('canceled_at');
     }
 }

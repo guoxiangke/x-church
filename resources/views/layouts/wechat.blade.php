@@ -12,6 +12,13 @@
           | {{ config('app.name', 'Laravel') }}
         </title>
 
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Styles -->
+        @livewireStyles
+
         <!-- Fonts -->
         <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
         <meta name="wechat-enable-text-zoom-em" content="true">
@@ -23,6 +30,12 @@
             }
             .weui-msg {
                 min-height: 100vh;
+            }
+            .page__desc {
+              margin-top: 4px;
+              color: var(--weui-FG-1);
+              text-align: left;
+              font-size: 14px;
             }
         </style>
 
@@ -56,8 +69,20 @@
                 document.body.setAttribute('data-weui-mode','care');
               }
             });
+            // 隐藏所有非基础按钮接口
+            wx.hideAllNonBaseMenuItem();
+            // 批量隐藏功能按钮接口
+            wx.hideMenuItems({
+            });
+
+            $('#close').click(function(){
+              wx.closeWindow();
+            });
           });
 
         </script>
+        @stack('modals')
+
+        @livewireScripts
     </body>
 </html>

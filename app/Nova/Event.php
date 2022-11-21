@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Event extends Resource
 {
+    // https://nova.laravel.com/docs/2.0/resources/#disabling-traffic-cop
+    public static $trafficCop = true;
+    public static function trafficCop(Request $request)
+    {
+        return static::$trafficCop;
+    }
+
     /**
      * The model the resource corresponds to.
      *
@@ -50,13 +57,17 @@ class Event extends Resource
             BelongsTo::make('service'),
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('description')->hideFromIndex(),
-            Text::make('live_url'),
             DateTime::make('begin_at'),
             Number::make('check_in_ahead'),
             Number::make('duration_hours'),
+            Boolean::make('签出功能','is_need_check_out'),
             Text::make('address')->hideFromIndex(),
+
+            Boolean::make('统计成人儿童','is_multi_enroll'),
+            Boolean::make('取消报名','cancel_ahead_hours'),
+            Boolean::make('报名留言','is_need_remark'),
+            Text::make('live_url'),
             Text::make('rrule'),
-            Boolean::make('is_need_check_out'),
         ];
     }
 

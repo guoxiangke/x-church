@@ -32,16 +32,18 @@
 			        </div>
 			        @endif
 
-			        @if(isset($enrollId))
+			        @if(isset($eventEnroll) && !$eventEnroll->canceled_at)
 			        <div class="weui-msg__opr-area">
 			            <p class="weui-btn-area">
 			                <a href="http://maps.google.com/maps?q={{$event->address}}" role="button" class="weui-btn weui-btn_primary">导航🧭</a>
 			            </p>
-
-				            	<br/>
-				                <span class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></span>
-				                <span class="weui-cells__tips showIOSDialog" id="showDialog4" ><a class="weui-link weui-wa-hotarea" href="javascript:">携带家眷</a></span>
-				                <span class="weui-cells__tips showIOSDialog" id="showDialog2" ><a class="weui-link weui-wa-hotarea" href="javascript:">报名附言</a></span>
+		            	<br/>
+		            	@if($event->cancel_ahead_hours)
+		                	<span class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></span>
+		                @endif
+		                @if($event->is_need_remark)
+		                	<span class="weui-cells__tips showIOSDialog" id="showDialog2" ><a class="weui-link weui-wa-hotarea" href="javascript:">报名附言</a></span>
+		                @endif
 			        </div>
 			        @endif
 
@@ -67,6 +69,7 @@
 		        </div>
 		    </div>
 
+		    @if(isset($eventEnroll))
 		    <div id="dialogs">
 		      <!--BEGIN dialog1-->
 
@@ -81,24 +84,9 @@
 		                    </div>
 		                  </div>
 		                </div>
-		                <div class="weui-half-screen-dialog__bd">
-		                  	<br>
-					        <div class="weui-cells weui-cells_form">
-					            <div class="weui-cell weui-cell_active">
-					                <div class="weui-cell__bd">
-					                    <textarea class="weui-textarea" placeholder="您的声音至关重要" rows="3"></textarea>
-					                    <div role="option" aria-live="polite" class="weui-textarea-counter"><span>0</span>/200</div>
-					                </div>
-					            </div>
-					        </div>
-		                  <br>
-		                </div>
-		                <div class="weui-half-screen-dialog__ft">
-		                  <div id="js_wrap_btn_area" class="weui-half-screen-dialog__btn-area">
-		                    <a id="js_wrap_btn_1" href="javascript:" class="js_close weui-btn weui-btn_default">取消</a>
-		                    <a href="javascript:" class="js_close weui-btn weui-btn_primary">确定</a>
-		                  </div>
-		                </div>
+				    	
+				    	<livewire:enrollment-more-info :eventEnroll="$eventEnroll"/>
+				    	
 		            </div>
 		        </div>
 
@@ -120,68 +108,21 @@
 		                </div>
 		                <div class="weui-half-screen-dialog__ft">
 		                  <div id="js_wrap_btn_area" class="weui-half-screen-dialog__btn-area">
-		                    <a id="js_wrap_btn_1" href="javascript:" class="js_close weui-btn weui-btn_default">不要取消</a>
-		                    <a href="javascript:" class="js_close weui-btn weui-btn_primary">确定取消</a>
+		                  	<livewire:enrollment-cancel :eventEnroll="$eventEnroll"/>
 		                  </div>
 		                </div>
 		            </div>
 		        </div>
-
-		        <div id="dialogWrap4" class="js_dialog_wrap" ref="showDialog4" aria-label="弹窗标题" role="dialog" aria-modal="false" aria-hidden="true" style="display: none;">
-		            <div aria-label="关闭" role="button" class="js_close weui-mask"></div>
-		            <div id="js_dialog_3" class="js_dialog weui-half-screen-dialog">
-		                <div class="weui-half-screen-dialog__hd">
-		                  <div class="weui-half-screen-dialog__hd__main">
-		                    <div class="weui-flex" style="align-items: center; font-size: 14px;">
-		                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
-		                      统计 吃饭人数，携带家眷？可以帮助家人报名。
-		                    </div>
-		                  </div>
-		                </div>
-		                <div class="weui-half-screen-dialog__bd">
-		                  	<br>
-							<div class="weui-cells__group weui-cells__group_form">
-						        <div class="weui-cells">
-						          
-						          <div id="showPicker1" role="button" aria-haspopup="listbox" class=" weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
-						            <div class="weui-cell__hd"><label class="weui-label">成人</label></div>
-						              <div class="weui-cell__bd">
-						                  <input name="count_adult" class="showPicker weui-input  weui-cell__control weui-cell__control_flex" type="text" pattern="0-9" placeholder="请输入成人数量" value=""/>
-						              </div>
-						          </div>
-
-						          <div id="showPicker2" role="button" aria-haspopup="listbox" class=" weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
-						            <div class="weui-cell__hd"><label class="weui-label">儿童</label></div>
-						              <div class="weui-cell__bd">
-						                  <input name="count_child" class="showPicker2 weui-input  weui-cell__control weui-cell__control_flex" type="text" pattern="[0-9]" placeholder="请输入儿童数量" value=""/>
-						              </div>
-						          </div>
-
-
-						        </div>
-						      </div>
-       						<br>
-		                </div>
-		                <div class="weui-half-screen-dialog__ft">
-		                  <div id="js_wrap_btn_area" class="weui-half-screen-dialog__btn-area">
-		                    <a id="js_wrap_btn_1" href="javascript:" class="js_close weui-btn weui-btn_default">取消</a>
-		                    <a href="javascript:" class="js_close weui-btn weui-btn_primary">确定</a>
-		                  </div>
-		                </div>
-		            </div>
-		        </div>
-
 			</div>
+			@endif
 
 		</div>
 	<script type="text/javascript">
 		 $(function(){
 	        const $dialog2 = $('#js_dialog_2');
 	        const $dialog3 = $('#js_dialog_3');
-	        const $dialog4 = $('#js_dialog_4');
 	        const $dialogWrap2 = $('#dialogWrap2');
 	        const $dialogWrap3 = $('#dialogWrap3');
-	        const $dialogWrap4 = $('#dialogWrap4');
 
 	        function closeDialog(o){
 	          const $jsDialogWrap = o.parents('.js_dialog_wrap');
@@ -225,24 +166,6 @@
 	              $dialogWrap3.trigger('focus');
 	            },200)
 	        });
-	        $('#showDialog4').on('click', function(){
-	            $dialogWrap4.attr('aria-hidden','false');
-	            $dialogWrap4.attr('aria-modal','true');
-	            $dialogWrap4.attr('tabindex','0');
-	            $dialogWrap4.fadeIn(200);
-	            $dialog4.addClass('weui-half-screen-dialog_show');
-	            wrapArea.style.visibility = 'hidden';
-	            setTimeout(function(){
-	              if(wrapBtn1.offsetHeight > 48){
-	                $dialog4.addClass('weui-half-screen-dialog_btn-wrap');
-	              }
-	              wrapArea.style.visibility = 'visible';
-	            },100);
-	            setTimeout(function(){
-	              $dialogWrap4.trigger('focus');
-	            },200)
-	        });
-
 
 	        $('#js_close').on('click', function(){
 	          closeDialog($(this));

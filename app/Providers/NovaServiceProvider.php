@@ -18,9 +18,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
-        Nova::userTimezone(function (Request $request) {
-            return $request->user()->timezone;
-        });
+        if(auth()->id())
+            Nova::userTimezone(function (Request $request) {
+                return $request->user()->timezone;
+            });
     }
 
     /**

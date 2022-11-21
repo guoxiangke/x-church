@@ -73,6 +73,18 @@ class CheckInController extends Controller
             'user_id' => $user_id,
             'event_id' => $event->id,
         ]);
+        // 取消报名的情况
+        if($eventEnroll&&$eventEnroll->canceled_at){
+            //您已取消报名，不可以再次报名！
+            return view('check-in',array_merge($data,[
+                'success' => false,
+                'status' => 7,
+                'title' => '失败',
+                'eventEnroll' => $eventEnroll,
+                'message' => '您已取消报名，不可以再次报名'
+            ]));
+        }
+
         // 结束后，不可以check in
         // 但，会后1小时，还有机会check out(已经报名/check-in的，需要check-out的)
         if($eventEnroll //必须有（报名/check-in）
@@ -118,7 +130,7 @@ class CheckInController extends Controller
                     'success' => true,
                     'title' => '报名成功',
                     'status' => 2,
-                    'enrollId' => $eventEnroll->id,
+                    'eventEnroll' => $eventEnroll,
                     'message' => "",
                     //感谢参与，我们将会在开始前{$event->check_in_ahead}分钟提醒您现场扫码签到?几个人TODO
                 ]));
@@ -130,7 +142,7 @@ class CheckInController extends Controller
                 $eventEnroll->save();
                 // 3个小时开始 到结束前，都可以check-in
                 return view('check-in', array_merge($data,[
-                    'enrollId' => $eventEnroll->id,
+                    'eventEnroll' => $eventEnroll,
                     'success' => true,
                     'status' => 3,
                     'title' => '签到成功',
@@ -158,7 +170,7 @@ class CheckInController extends Controller
                     'success' => true,
                     'status' => 5,
                     'title' => '签到成功',
-                    'enrollId' => $eventEnroll->id,
+                    'eventEnroll' => $eventEnroll,
                     'message' => ''
                 ]));
                 // 必须是扫码（动态：防止作弊，需要每周打印？/静态，省事儿）
@@ -170,7 +182,7 @@ class CheckInController extends Controller
                     'success' => false,
                     'status' => 6,
                     'title' => '签到未开放',
-                    'enrollId' => $eventEnroll->id,
+                    'eventEnroll' => $eventEnroll,
                     'message' => "请于开始前{$event->check_in_ahead}分钟签到"
                 ]));
             }
@@ -178,7 +190,7 @@ class CheckInController extends Controller
             return view('check-in', array_merge($data,[
                 'success' => true,
                 'status' => 7,
-                'enrollId' => $eventEnroll->id,
+                'eventEnroll' => $eventEnroll,
                 'title' => '无需重复签到!',
                 'message' => ''
             ]));

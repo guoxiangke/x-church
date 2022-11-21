@@ -22,6 +22,12 @@ use App\Http\Controllers\EventEnrollController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/weui/success', function () {
+    return view('weui.success');
+});
+Route::get('/weui/error', function () {
+    return view('weui.warn');
+});
 
 
 // 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面

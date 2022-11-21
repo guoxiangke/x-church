@@ -116,7 +116,7 @@ class WeixinController extends Controller
                     ]);
                     unset($caches['social_id']);//Contact 里没有 social_id
                     $contact = Contact::firstOrCreate($caches);//compact('social_id','organization_id','user_id')
-                    $content = "恭喜你绑定成功！点此更新联系人信息";//$contact->link
+                    $content = "恭喜你绑定成功！";//点此更新联系人信息$contact->link
                     return app(Xbot::class)->send($content, $wxid);
                     // 恭喜你绑定成功！点此更新联系人信息 $contact->link
                 }else{
