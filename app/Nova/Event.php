@@ -60,8 +60,8 @@ class Event extends Resource
             Boolean::make('统计成人儿童','is_multi_enroll'),
             Boolean::make('取消报名','cancel_ahead_hours'),
             Boolean::make('报名留言','is_need_remark'),
-            Text::make('live_url'),
-            Text::make('rrule'),
+            Text::make('live_url')->nullable(),
+            Text::make('rrule')->nullable(),
         ];
     }
 

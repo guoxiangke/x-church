@@ -58,13 +58,16 @@ class Service extends Resource
             BelongsTo::make('organization')->rules('required'),
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('description')->hideFromIndex(),
-            Text::make('live_url')->hideFromIndex(),
             DateTime::make('begin_at'),
             Number::make('check_in_ahead'),
             Number::make('duration_hours'),
+            Boolean::make('签出功能','is_need_check_out'),
             Text::make('address')->hideFromIndex(),
-            Text::make('rrule')->hideFromIndex(),
-            Boolean::make('is_need_check_out'),
+            // Boolean::make('统计成人儿童','is_multi_enroll')->nullable(),
+            Boolean::make('取消报名','cancel_ahead_hours')->nullable(),
+            // Boolean::make('报名留言','is_need_remark')->nullable(),
+            Text::make('live_url')->nullable(),
+            Text::make('rrule')->nullable()->hideFromIndex(),
         ];
     }
 

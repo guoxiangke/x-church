@@ -25,9 +25,11 @@ return new class extends Migration
             $table->unsignedSmallInteger('check_in_ahead')->default(180)->comment('提前几分钟开始check-in？');
             $table->unsignedSmallInteger('duration_hours')->nullable()->comment('持续时间，为了checked_in截止时间');// 持续3天的活动？
             $table->string('address')->nullable()->comment('地点');
-            $table->string('rrule')->nullable()->comment('一次性活动？重复性活动');
+            $table->string('rrule')->comment('必须是重复周期性的活动');
             $table->boolean('is_need_check_out')->nullable()->comment('是否需要checkout：儿童service');
             $table->unsignedTinyInteger('cancel_ahead_hours')->default(3)->comment('提前几小时，不可以取消报名');
+            $table->boolean('is_multi_enroll')->nullable()->comment('成人+儿童参，一人报名多人，null关闭功能');
+            $table->boolean('is_need_remark')->nullable()->comment('报名时是否收集留言，null关闭功能');
             $table->softDeletes();
             $table->timestamps();
         });

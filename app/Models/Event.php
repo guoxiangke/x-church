@@ -36,4 +36,14 @@ class Event extends Model
     public function organization(){
         return $this->belongsTo(Organization::class);
     }
+
+    // 如果活动已结束, 结束后1h可以check-out
+    public function isEnd(){
+        return now() > $this->begin_at->addHours($this->duration_hours+1);
+    }
+    // 是否在今天？
+    public function isToday(){
+        return now()->diffInDays($this->begin_at) === 0;
+    }
+    
 }

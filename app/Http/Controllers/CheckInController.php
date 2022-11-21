@@ -8,13 +8,32 @@ use App\Models\Event;
 use App\Models\EventEnroll;
 use App\Models\Service;
 use App\Models\Social;
+use App\Services\Rrule;
 use Cookie;
 
 class CheckInController extends Controller
 {
-    //
+    //$service 一定是周期性的，rrule为必选项
     public function serviceCheck(Request $request, Service $service){
-        $event = $service->events()->orderBy('created_at', 'desc')->firstOrFail();
+        $event = $service->events()->orderBy('created_at', 'desc')->first();
+
+        $isNeedCreate = false;
+        // 如果周期性的event没有，则创建
+        if(!$event) $isNeedCreate = true;
+        // 如果活动已结束，且不是当天，则创建
+        if($event->isEnd() && !$event->isToday()){
+            $isNeedCreate = true;
+        }
+        if($isNeedCreate){
+            $data = $service->toArray();
+            $service_id = $service->id;
+
+            $rule = new Rrule($service->begin_at, $service->rrule, auth()->user()->timezone??config('app.timezone'));
+            $begin_at = $rule->getNextEventDate(); // 从rrule计算下次活动开始时间和日期
+            $name = $service->name . ' - '.$begin_at->format('ymd');
+            $rrule = null;//周期性创建的1次性活动
+            $event = Event::create(array_merge($data, compact('rrule','name','service_id','begin_at')));
+        }
         return $this->check($event);
     }
     public function eventCheck(Request $request, Event $event){
