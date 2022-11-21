@@ -15,11 +15,9 @@ class CheckInController extends Controller
     //
     public function serviceCheck(Request $request, Service $service){
         $event = $service->events()->orderBy('created_at', 'desc')->firstOrFail();
-        Cookie::queue('eventId', $event->id, 1); // 为了微信跳转
         return $this->check($event);
     }
     public function eventCheck(Request $request, Event $event){
-        Cookie::queue('eventId', $event->id, 1); // 为了微信跳转
         return $this->check($event);
     }
     // 1.报名 
@@ -57,7 +55,7 @@ class CheckInController extends Controller
         }
         $code6 = '123456';
         if(!$isBind) {
-            $code6 = (int)substr(now()->valueOf(), -6) - $user_id%100;
+            $code6 = (int) (random_int(1, 9) . substr(now()->valueOf(), -5)) - $user_id%100;
             Cache::put($code6, compact('social_id','organization_id','user_id'), 60);
         }
         $organization = $event->organization;
