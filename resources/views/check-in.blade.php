@@ -20,41 +20,31 @@
 
 			        @if(!$isBind)
 			        <div class="weui-msg__tips-area">
-			          <p class="weui-msg__tips">及时获取该Event动态</p>
-			        </div>
-			        <div class="weui-msg__opr-area">
-			            <p class="weui-btn-area">
-			                <a href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_primary">{{$organization->wechat_ai_title??'AI助理'}}微信</a>
-			            </p>
-			        </div>
-			        <div class="weui-msg__tips-area">
-			          <p class="weui-msg__tips">请微信发送 <span style="font-size: 24px">{{$code6}}</span>  ⬆️给{{$organization->wechat_ai_title??'AI助理'}}<br/>此验证码60s内有效！</p>
+			          <p class="weui-msg__tips">及时获取活动动态？请微信发送 <span style="font-size: 24px">{{$code6}}</span>  给<a style="color: #fff;" href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea">{{$organization->wechat_ai_title??'AI助理'}}微信</a><br/>此验证码60s内有效！</p>
 			        </div>
 			        @endif
 
 			        @if(isset($eventEnroll) && !$eventEnroll->canceled_at)
 			        <div class="weui-msg__opr-area">
-			            <p class="weui-btn-area">
-			                <a href="http://maps.google.com/maps?q={{$event->address}}" role="button" class="weui-btn weui-btn_primary">导航🧭</a>
-			            </p>
-		            	<br/>
-		            	@if($event->cancel_ahead_hours)
-		                	<span class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></span>
-		                @endif
 		                @if($event->is_need_remark)
-		                <span class="" id="showDialog2" ><a class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea" href="javascript:">报名附言</a></span>
+		                <div class="" id="showDialog2" ><a class="weui-btn weui-btn_primary" href="javascript:">报名附言</a></div>
 		                @endif
+		            	@if($event->cancel_ahead_hours)
+		                	<div class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></div>
+		                @endif
+
 			        </div>
 			        @endif
 
 		            @if(!in_array($status,[3,7,0]))
 		            <div class="weui-msg__custom-area">
 		              <ul class="weui-form-preview__list">
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("M j H:i")}}（{{$event->duration_hours}}小时）</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("M j H:i")}}</p></li><li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时长</label><p class="weui-form-preview__value">{{$event->duration_hours}}小时</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">签到时间</label><p class="weui-form-preview__value">开始前{{$event->check_in_ahead}}分钟</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">当前时间</label><p class="weui-form-preview__value">{{now()->format("M j H:i Y D")}}</p></li>
 		              </ul>
 		            </div>
+		            <div><a href="http://maps.google.com/maps?q={{$event->address}}" role="button" class="weui-btn weui-btn_disabled weui-btn_primary">查看活动地点</a></div>
 		            @endif
 
 		        </div>
@@ -64,7 +54,7 @@
 		                <p class="weui-footer__links">
 		                    <a href="javascript:" class="weui-wa-hotarea weui-footer__link">{{$organization->system_name??$organization->name_abbr}}活动签到管理系统</a>
 		                </p>
-		                <p class="weui-footer__text">Copyright &copy; 2008-2016 yilindeli.com</p>
+		                <p class="weui-footer__text">Copyright &copy; 2022 {{$organization->website_url??'yilindeli.com'}}</p>
 		            </div>
 		        </div>
 		    </div>
@@ -79,8 +69,8 @@
 		                <div class="weui-half-screen-dialog__hd">
 		                  <div class="weui-half-screen-dialog__hd__main">
 		                    <div class="weui-flex" style="align-items: center; font-size: 14px;">
-		                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
-		                      昵称2
+		                      <img src="{{$social->avatar??'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII='}}" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
+		                      {{$social->name??'昵称'}}
 		                    </div>
 		                  </div>
 		                </div>
@@ -96,8 +86,8 @@
 		                <div class="weui-half-screen-dialog__hd">
 		                  <div class="weui-half-screen-dialog__hd__main">
 		                    <div class="weui-flex" style="align-items: center; font-size: 14px;">
-		                      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII=" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
-		                      昵称
+		                      <img src="{{$social->avatar??'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII='}}" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
+		                      {{$social->name??'昵称'}}
 		                    </div>
 		                  </div>
 		                </div>

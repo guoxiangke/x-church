@@ -30,7 +30,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
-        return true;
+        return $user->isAdmin() || $user->id === $event->organization->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return true;
+        return $user->isAdmin() || $user->id === $event->organization->user_id;
     }
 
     /**

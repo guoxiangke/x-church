@@ -5,35 +5,24 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-
-class Organization extends Resource
+class Social extends Resource
 {
-    
-    // 限制当前用户的
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        $userId = $request->user()->id;
-        if($userId === 1) return $query;
-        return $query->where('user_id', $userId);
-    }
-
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Organization::class;
+    public static $model = \App\Models\Social::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -41,7 +30,7 @@ class Organization extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'id',
     ];
 
     /**
@@ -55,21 +44,12 @@ class Organization extends Resource
         return [
             ID::make()->sortable(),
             BelongsTo::make('user')->rules('required'),
-            Text::make('name')->rules('required', 'string', 'max:255'),
-            Text::make('name_en')->nullable(),
-            Text::make('name_abbr')->nullable(),
-            Text::make('name_en_abbr')->nullable(),
-            Text::make('telephone')->rules('required', 'string', 'max:255'),
-            Text::make('email')->nullable(),
-            Text::make('address')->nullable()->hideFromIndex(),
-            Text::make('website_url')->nullable()->hideFromIndex(),
-            Text::make('logo_url')->nullable()->hideFromIndex(),
-            Date::make('birthday')->nullable(),
-            Text::make('introduce')->nullable()->hideFromIndex(),
-            Text::make('contact_fields')->hideFromIndex(),
-            Text::make('system_name')->rules('required', 'string', 'max:255'),
-            Text::make('wechat_ai_title')->nullable(),
-            Text::make('wechat_qr_url')->hideFromIndex(),
+            Text::make('social_id')->rules('required'),
+            Text::make('name')->rules('required'),
+            Text::make('avatar')->rules('required')->hideFromIndex(),
+            Text::make('wxid')->nullable()->hideFromIndex(),
+            Text::make('nickname')->nullable()->hideFromIndex(),
+            Text::make('telephone')->nullable()->hideFromIndex(),
         ];
     }
 

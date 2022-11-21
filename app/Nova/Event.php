@@ -13,12 +13,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Event extends Resource
 {
-    // https://nova.laravel.com/docs/2.0/resources/#disabling-traffic-cop
-    public static $trafficCop = true;
-    public static function trafficCop(Request $request)
-    {
-        return static::$trafficCop;
-    }
 
     /**
      * The model the resource corresponds to.

@@ -30,7 +30,7 @@ class ServicePolicy
      */
     public function view(User $user, Service $service)
     {
-        return true;
+        return $user->isAdmin() || $user->id === $service->organization->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class ServicePolicy
      */
     public function update(User $user, Service $service)
     {
-        return true;
+        return $user->isAdmin() || $user->id === $service->organization->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class ServicePolicy
      */
     public function delete(User $user, Service $service)
     {
-        return true;
+        //
     }
 
     /**
@@ -77,7 +77,7 @@ class ServicePolicy
      */
     public function restore(User $user, Service $service)
     {
-        return true;
+        //
     }
 
     /**

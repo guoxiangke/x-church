@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $cuser)
     {
-        return 1;//$cuser->id === 1;
+        return  $cuser->isAdmin();
     }
 
     /**
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $cuser, User $user)
     {
-        return 1;
+        return  $cuser->isAdmin();
     }
 
     /**
@@ -40,7 +40,7 @@ class UserPolicy
      */
     public function create(User $cuser)
     {
-        return 1;
+        return  $cuser->isAdmin();
     }
 
     /**
@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $cuser, User $user)
     {
-        return 1;
+        return  $cuser->isAdmin() || $cuser->id===$user->id;
     }
 
     /**

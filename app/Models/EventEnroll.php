@@ -26,7 +26,7 @@ class EventEnroll extends Model
     public function event(){
         return $this->belongsTo(Event::class);
     }
-    // reference_id
+    // 不一定都有，可能是单独的event而不属于某个service
     public function service(){
         return $this->belongsTo(Service::class);
     }

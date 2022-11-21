@@ -21,7 +21,14 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use SoftDeletes;
     use Metable;
-
+    
+    public function organizations(){
+        return $this->hasMany(Organization::class);
+    }
+    public function isAdmin(){
+        return  $this->id === 1;
+    }
+    
     /**
      * The attributes that are mass assignable.
      *

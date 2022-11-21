@@ -16,18 +16,18 @@ class NewContacts extends Value
      */
     public function calculate(NovaRequest $request)
     {
+        
+        return $this->count($request, \App\Models\Contact::class);
+        
+        $userId = $request->user()->id;
+        if($userId === 1) return $this->count($request, \App\Models\Contact::class);
+        
         $orgId = \App\Models\Organization::where('user_id', $request->user()->id)->firstOrFail()->id;
 
         return $this->count($request, \App\Models\Contact::class, 'filterByOrg');
 
         
     }
-    public function filterByOrg($orgId=1)
-    {
-        // Log::error(__CLASS__,[$orgId]);
-        // return $this->where('organization_id', $orgId);
-    }
-
     /**
      * Get the ranges available for the metric.
      *

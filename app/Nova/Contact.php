@@ -17,9 +17,19 @@ class Contact extends Resource
     // 限制当前用户的 // 必须是church owner
     public static function indexQuery(NovaRequest $request, $query)
     {
+        $userId = $request->user()->id;
+        if($userId === 1) return $query;
+
         $id = \App\Models\Organization::where('user_id', $request->user()->id)->orderBy('created_at','desc')->first()->id;
         return $query->where('organization_id', $id);
     }
+    
+    public function filterByOrg($orgId=1)
+    {
+        // Log::error(__CLASS__,[$orgId]);
+        // return $this->where('organization_id', $orgId);
+    }
+
 
     /**
      * The model the resource corresponds to.

@@ -13,6 +13,15 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Service extends Resource
 {
+    // 限制当前用户的
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $userId = $request->user()->id;
+        if($userId === 1) return $query;
+        // 
+        return $query->whereIn('organization_id', $request->user()->organizations()->pluck('id'));
+    }
+
     /**
      * The model the resource corresponds to.
      *

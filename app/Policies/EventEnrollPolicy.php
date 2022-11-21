@@ -30,7 +30,7 @@ class EventEnrollPolicy
      */
     public function view(User $user, EventEnroll $eventEnroll)
     {
-        return true;
+        return $user->isAdmin() || $user->id === $eventEnroll->event->organization->user_id;
     }
 
     /**
@@ -41,7 +41,6 @@ class EventEnrollPolicy
      */
     public function create(User $user)
     {
-        return true;
     }
 
     /**
@@ -53,7 +52,6 @@ class EventEnrollPolicy
      */
     public function update(User $user, EventEnroll $eventEnroll)
     {
-        return true;
     }
 
     /**
@@ -65,7 +63,6 @@ class EventEnrollPolicy
      */
     public function delete(User $user, EventEnroll $eventEnroll)
     {
-        return true;
     }
 
     /**
@@ -77,7 +74,6 @@ class EventEnrollPolicy
      */
     public function restore(User $user, EventEnroll $eventEnroll)
     {
-        return true;
     }
 
     /**
@@ -89,6 +85,5 @@ class EventEnrollPolicy
      */
     public function forceDelete(User $user, EventEnroll $eventEnroll)
     {
-        return true;
     }
 }

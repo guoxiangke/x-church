@@ -18,7 +18,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user)
     {
-        return 1;//$user->id === 1;
+        return true;
     }
 
     /**
@@ -30,7 +30,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization)
     {
-        //
+        return $user->isAdmin() || $user->id === $organization->user_id;
     }
 
     /**
@@ -41,7 +41,7 @@ class OrganizationPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -53,7 +53,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization)
     {
-        return 1;
+        return $user->isAdmin() || $user->id === $organization->user_id;
     }
 
     /**
