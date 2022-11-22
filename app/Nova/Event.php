@@ -52,7 +52,7 @@ class Event extends Resource
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('description')->hideFromIndex(),
             DateTime::make('begin_at'),
-            Number::make('check_in_ahead')->help('单位：分钟，默认180分钟'),
+            Number::make('check_in_ahead')->rules('required')->help('单位：分钟，默认180分钟'),
             Number::make('活动时长','duration_hours')->help('单位：小时'),
             Boolean::make('签出功能','is_need_check_out'),
             Text::make('活动地址','address')->hideFromIndex(),
