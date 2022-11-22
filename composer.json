@@ -16,6 +16,7 @@
         "livewire/livewire": "^2.5",
         "plank/laravel-metable": "^5.3",
         "predis/predis": "^2.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "simshaun/recurr": "^5.0",
         "socialiteproviders/weixin": "^4.1",
         "spatie/laravel-activitylog": "^4.6",
