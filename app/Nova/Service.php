@@ -60,7 +60,7 @@ class Service extends Resource
             Text::make('QR', function () {
                 $avatar =  QrCode::size(100)->generate(route('service.checkin', $this->id));
                 return "$avatar <br/><p>截图以上二维码打印或分享。</p><p>复制本链接 ".route('service.checkin', $this->id)." <a href='https://www.qrcode-monkey.com/' target='_blank'>点此手动生成漂亮QR</a></p>";
-            })->asHtml()->showOnDetail(),
+            })->asHtml()->onlyOnDetail(),
             BelongsTo::make('organization')->rules('required'),
             Text::make('description')->hideFromIndex(),
             DateTime::make('begin_at'),

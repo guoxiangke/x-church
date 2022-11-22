@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class Event extends Resource
 {
@@ -59,6 +60,10 @@ class Event extends Resource
             BelongsTo::make('organization')->rules('required')->hideFromDetail(),
             BelongsTo::make('service')->nullable()->hideFromDetail(),
             Text::make('Name')->rules('required', 'string', 'max:255'),
+            Text::make('QR', function () {
+                $avatar =  QrCode::size(100)->generate(route('service.checkin', $this->id));
+                return "$avatar <br/><p>截图以上二维码打印或分享。</p><p>复制本链接 ".route('event.checkin', $this->id)." <a href='https://www.qrcode-monkey.com/' target='_blank'>点此手动生成漂亮QR</a></p>";
+            })->asHtml()->onlyOnDetail(),
             Text::make('description')->hideFromIndex()->hideFromDetail(),
             DateTime::make('begin_at'),
             Number::make('check_in_ahead')->rules('required')->hideFromDetail()->help('单位：分钟，默认180分钟'),
