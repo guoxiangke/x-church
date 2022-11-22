@@ -14,14 +14,13 @@ use App\Nova\Metrics\ContactsPerMonth;
 
 class Contact extends Resource
 {
-    // 限制当前用户的 // 必须是church owner
+    // 限制 owner
     public static function indexQuery(NovaRequest $request, $query)
     {
         $userId = $request->user()->id;
         if($userId === 1) return $query;
 
-        $id = \App\Models\Organization::where('user_id', $request->user()->id)->orderBy('created_at','desc')->first()->id;
-        return $query->where('organization_id', $id);
+        return $query->whereIn('organization_id', $request->user()->organizations()->pluck('id'));
     }
     
     public function filterByOrg($orgId=1)

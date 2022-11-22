@@ -8,18 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Metable\Metable;
 use Illuminate\Support\Facades\Http;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Organization extends Model
 {
     use HasFactory;
     use Metable;
     use SoftDeletes;
-    
+
     use LogsActivity;
     protected static $recordEvents = ['updated'];
-    protected static $logAttributes = ['*'];
-    protected static $logAttributesToIgnore = [ 'none'];
-    protected static $logOnlyDirty = true;
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at',

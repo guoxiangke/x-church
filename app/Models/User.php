@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Metable\Metable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
@@ -25,9 +26,13 @@ class User extends Authenticatable
 
     use LogsActivity;
     protected static $recordEvents = ['updated'];
-    protected static $logAttributes = ['*'];
-    protected static $logAttributesToIgnore = [ 'none'];
-    protected static $logOnlyDirty = true;
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
     
     public function organizations(){
         return $this->hasMany(Organization::class);

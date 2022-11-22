@@ -14,6 +14,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Event extends Resource
 {
 
+    // 限制 拥有者
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $userId = $request->user()->id;
+        if($userId === 1) return $query;
+
+        return $query->whereIn('organization_id', $request->user()->organizations()->pluck('id'));
+    }
     /**
      * The model the resource corresponds to.
      *
@@ -84,7 +92,9 @@ class Event extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new Filters\EventType,
+        ];
     }
 
     /**

@@ -11,6 +11,18 @@ use Laravel\Nova\Fields\BelongsTo;
 
 class EventEnroll extends Resource
 {
+    // 限制 拥有者
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $userId = $request->user()->id;
+        if($userId === 1) return $query;
+
+        // 找到组织里的所有event
+        $orgIds = $request->user()->organizations()->pluck('id');
+        $eventIds = \App\Models\Event::whereIn('organization_id', $orgIds)->pluck('id');
+        return $query->whereIn('event_id', $eventIds);
+    }
+
     /**
      * The model the resource corresponds to.
      *
