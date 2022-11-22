@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 
@@ -70,6 +71,8 @@ class Organization extends Resource
             Text::make('system_name')->rules('required', 'string', 'max:255'),
             Text::make('wechat_ai_title')->nullable(),
             Text::make('wechat_qr_url')->hideFromIndex(),
+
+            HasMany::make('Contacts'),
         ];
     }
 

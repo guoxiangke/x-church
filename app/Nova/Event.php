@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -54,22 +55,25 @@ class Event extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            BelongsTo::make('organization')->rules('required'),
-            BelongsTo::make('service')->nullable(),
+            ID::make()->sortable()->hideFromDetail(),
+            BelongsTo::make('organization')->rules('required')->hideFromDetail(),
+            BelongsTo::make('service')->nullable()->hideFromDetail(),
             Text::make('Name')->rules('required', 'string', 'max:255'),
-            Text::make('description')->hideFromIndex(),
+            Text::make('description')->hideFromIndex()->hideFromDetail(),
             DateTime::make('begin_at'),
-            Number::make('check_in_ahead')->rules('required')->help('单位：分钟，默认180分钟'),
-            Number::make('活动时长','duration_hours')->help('单位：小时'),
-            Boolean::make('签出功能','is_need_check_out'),
-            Text::make('活动地址','address')->hideFromIndex(),
+            Number::make('check_in_ahead')->rules('required')->hideFromDetail()->help('单位：分钟，默认180分钟'),
+            Number::make('活动时长','duration_hours')->hideFromDetail()->help('单位：小时'),
+            Boolean::make('签出功能','is_need_check_out')->hideFromDetail(),
+            Text::make('活动地址','address')->hideFromIndex()->hideFromDetail(),
 
-            Boolean::make('统计成人儿童','is_multi_enroll'),
-            Boolean::make('取消报名','cancel_ahead_hours'),
-            Boolean::make('报名留言','is_need_remark'),
-            Text::make('直播链接','live_url')->nullable(),
-            Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
+            Boolean::make('统计成人儿童','is_multi_enroll')->hideFromDetail(),
+            Boolean::make('取消报名','cancel_ahead_hours')->hideFromDetail(),
+            Boolean::make('报名留言','is_need_remark')->hideFromDetail(),
+            Text::make('直播链接','live_url')->nullable()->hideFromDetail(),
+            Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->hideFromDetail()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
+
+            HasMany::make('EventEnrolls'),
+
         ];
     }
 

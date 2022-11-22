@@ -24,18 +24,7 @@ class EventType extends Filter
      */
     public function apply(NovaRequest $request, $query, $value)
     {
-        switch ($value ) {
-            case '1':
-                return $query->whereNull('rrule');
-                break;
-            case '2':
-                return $query->whereNotNull('rrule');
-                break;
-            
-            default:
-                return $query;
-                break;
-        }
+        return $query->whereNull('service_id')->whereNull('rrule');
     }
 
     /**
@@ -48,7 +37,6 @@ class EventType extends Filter
     {
         return [
             '单次活动' => 1,
-            '周期性活动' => 2,
         ];
     }
 }

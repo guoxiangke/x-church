@@ -11,6 +11,8 @@ use Laravel\Nova\Fields\BelongsTo;
 
 class EventEnroll extends Resource
 {
+    public static $displayInNavigation = false;
+
     // 限制 拥有者
     public static function indexQuery(NovaRequest $request, $query)
     {
@@ -56,9 +58,13 @@ class EventEnroll extends Resource
     {
         return [
             ID::make()->sortable(),
+            Text::make('Avatar', function () {
+                $avatar =  \App\Models\Social::where('user_id', $this->user_id)->first()->avatar;
+                return '<img style="max-width:45px;" src="'.$avatar.'"></img>';
+            })->asHtml()->onlyOnIndex(),
             BelongsTo::make('user')->rules('required', 'string', 'max:255'),
             BelongsTo::make('event')->rules('required', 'string', 'max:255'),
-            BelongsTo::make('service')->rules('required', 'string', 'max:255'),
+            BelongsTo::make('service')->rules('required', 'string', 'max:255')->hideFromIndex(),
             DateTime::make('enrolled_at'),
             DateTime::make('double_checked_at'),
             DateTime::make('checked_in_at'),

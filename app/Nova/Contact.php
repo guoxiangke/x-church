@@ -14,6 +14,8 @@ use App\Nova\Metrics\ContactsPerMonth;
 
 class Contact extends Resource
 {
+    // public static $displayInNavigation = false;
+    
     // 限制 owner
     public static function indexQuery(NovaRequest $request, $query)
     {
@@ -22,7 +24,7 @@ class Contact extends Resource
 
         return $query->whereIn('organization_id', $request->user()->organizations()->pluck('id'));
     }
-    
+
     public function filterByOrg($orgId=1)
     {
         // Log::error(__CLASS__,[$orgId]);

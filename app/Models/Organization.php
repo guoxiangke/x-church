@@ -35,6 +35,10 @@ class Organization extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function contacts(){
+        return $this->hasMany(Contact::class);
+    }
+
     public function send($content, $wxid)
     {
         return Http::withToken($this->wechat_ai_token??config('services.xbot.token'))
