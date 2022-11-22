@@ -21,7 +21,7 @@ class CheckInController extends Controller
         // 如果周期性的event没有，则创建
         if(!$event) $isNeedCreate = true;
         // 如果活动已结束，且不是当天，则创建
-        if($event->isEnd() && !$event->isToday()){
+        if($event && $event->isEnd() && !$event->isToday()){
             $isNeedCreate = true;
         }
         if($isNeedCreate){

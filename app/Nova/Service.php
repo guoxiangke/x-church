@@ -59,15 +59,16 @@ class Service extends Resource
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('description')->hideFromIndex(),
             DateTime::make('begin_at'),
-            Number::make('check_in_ahead'),
-            Number::make('duration_hours'),
+            Number::make('check_in_ahead')->help('单位：分钟，默认180分钟'),
+            Number::make('活动时长','duration_hours')->help('单位：小时'),
             Boolean::make('签出功能','is_need_check_out'),
-            Text::make('address')->hideFromIndex(),
-            // Boolean::make('统计成人儿童','is_multi_enroll')->nullable(),
+            Text::make('活动地址','address')->hideFromIndex(),
+            Boolean::make('统计成人儿童','is_multi_enroll')->nullable(),
             Boolean::make('取消报名','cancel_ahead_hours')->nullable(),
-            // Boolean::make('报名留言','is_need_remark')->nullable(),
-            Text::make('live_url')->nullable(),
-            Text::make('rrule')->nullable()->hideFromIndex(),
+            Boolean::make('报名留言','is_need_remark')->nullable(),
+            Text::make('直播链接','live_url')->nullable(),
+            Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
+
         ];
     }
 
