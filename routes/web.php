@@ -53,21 +53,11 @@ Route::middleware([
     // ]);
 
 
-    // 1.报名 
-        // 感谢您登记报名参加xx活动，我们将会在开始前2小时提醒您。
-    // 2.check-in 提前2小时，
-        // 您报名参加的活动，还有2个小时即将开始，请到场后再次扫码check-in
-    // 3.after begin-time checkout
-        // no need checkout this event，谢谢！
-    // 新人登记
-        //1.新人扫码,set cookie churchId & this url，跳转登陆
-        //2.扫码成功，跳转到 this url 继续创建一个 event_enrolls
-        //3.如果没bind AI微信，则
-    // && Sunday check-in/out
-        //2.扫码成功，跳转到 this url 继续创建一个 event_enrolls
-        //3.如果是第三次扫码，则 checkout
-    Route::get('/services/{service}/check-in-out',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
-    Route::get('/events/{event}/check-in-out',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
+    // /services/{service}/check-in-out
+    // /events/{event}/check-in-out
+    // https://github.com/mtvs/eloquent-hashids
+    Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
+    Route::get('/e/{event:hashid}',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
 
 
     // 报名人数更新 /event_enrolls/{{$enrollId}}/update

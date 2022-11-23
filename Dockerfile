@@ -16,7 +16,10 @@ RUN set -eux; \
     libpng-dev \
     libpq-dev \
     libzip-dev \
+    libmagickwand-dev \
   ; \
+  pecl install imagick; \
+   \
   \
   docker-php-ext-configure gd \
     --with-freetype \
@@ -30,7 +33,9 @@ RUN set -eux; \
     pdo_pgsql \
     zip \
     pcntl \
+    bcmath \
   ; \
+  docker-php-ext-enable imagick bcmath; \
   \
 # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
   apt-mark auto '.*' > /dev/null; \

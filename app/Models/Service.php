@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Metable\Metable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Mtvs\EloquentHashids\HasHashid;
+use Mtvs\EloquentHashids\HashidRouting;
 
 class Service extends Model
 {
+    use HasHashid, HashidRouting;
+    protected $appends = ['hashid','qrpath'];
+    public function getQrpathAttribute()
+    {
+        return "public/s-{$this->organization->id}-{$this->hashid}.png";
+    }
     use HasFactory;
     use Metable;
     use SoftDeletes;

@@ -14,6 +14,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.5",
+        "mtvs/eloquent-hashids": "^3.3",
         "plank/laravel-metable": "^5.3",
         "predis/predis": "^2.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
