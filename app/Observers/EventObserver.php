@@ -19,11 +19,12 @@ class EventObserver
         $organization = $event->organization;
         $path = $event->qrpath;
         if(!Storage::exists($path)){
-            $avatar =  QrCode::size(2000)
+            $avatar =  QrCode::size(1000)
                 ->format('png')
                 ->eye('square')
                 ->style('dot')
                 ->merge($organization->logo_url??'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png', .3, true)
+                ->errorCorrection('H')
                 ->generate(route('service.checkin', $event->hashid), Storage::path($path));
         }
     }

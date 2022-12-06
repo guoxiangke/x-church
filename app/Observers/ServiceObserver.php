@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Service;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceObserver
 {
@@ -17,11 +19,12 @@ class ServiceObserver
         $organization = $service->organization;
         $path = $service->qrpath;
         if(!Storage::exists($path)){
-            $avatar =  QrCode::size(2000)
+            $avatar =  QrCode::size(1000)
                 ->format('png')
                 ->eye('square')
                 ->style('dot')
                 ->merge($organization->logo_url??'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png', .3, true)
+                ->errorCorrection('H')
                 ->generate(route('service.checkin', $service->hashid), Storage::path($path));
         }
     }
