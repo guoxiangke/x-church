@@ -36,6 +36,10 @@
 			        </div>
 			        @endif
 
+			        @if($event->is_need_telephone && $social && !$social->telephone)
+			        <livewire:social-telephone-update :social="$social"/>
+			        @endif
+
 		            @if(!in_array($status,[3,7,0]))
 		            <div class="weui-msg__custom-area">
 		              <ul class="weui-form-preview__list">
@@ -107,6 +111,18 @@
 			@endif
 
 		</div>
+		<style type="text/css">
+			#js_input3:focus,#textarea:focus {
+			    outline: none !important;
+			    border:1px solid var(--weui-BRAND);
+			    box-shadow: 0 0 10px var(--weui-BRAND);
+			  }
+			#js_input3,#textarea {
+			    outline: none !important;
+			    border:1px solid var(--weui-BRAND);
+			  }
+
+		</style>
 	<script type="text/javascript">
 		 $(function(){
 	        const $dialog2 = $('#js_dialog_2');
