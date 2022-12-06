@@ -59,7 +59,8 @@ class EventEnroll extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Avatar', function () {
-                $avatar =  \App\Models\Social::where('user_id', $this->user_id)->first()->avatar;
+                $social = \App\Models\Social::where('user_id', $this->user_id)->first();
+                $avatar = $social?$social->avatar:'';
                 return '<img style="max-width:45px;" src="'.$avatar.'"></img>';
             })->asHtml()->onlyOnIndex(),
             BelongsTo::make('user')->rules('required', 'string', 'max:255'),

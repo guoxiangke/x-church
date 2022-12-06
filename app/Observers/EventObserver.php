@@ -25,7 +25,7 @@ class EventObserver
                 ->style('dot')
                 ->merge($organization->logo_url??'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png', .3, true)
                 ->errorCorrection('H')
-                ->generate(route('service.checkin', $event->hashid), Storage::path($path));
+                ->generate(route('event.checkin', $event->hashid), Storage::path($path));
         }
     }
 
