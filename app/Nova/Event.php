@@ -62,7 +62,7 @@ class Event extends Resource
             Text::make('Name')->rules('required', 'string', 'max:255'),
             Text::make('QR', function () {
                 $url = Storage::url($this->qrpath);
-                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或分享。</p>";
+                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或分享。</p><p>".route('event.checkin', $this->hashid)."</p>";
             })->asHtml()->onlyOnDetail(),
             Text::make('description')->hideFromIndex()->hideFromDetail(),
             DateTime::make('begin_at'),
