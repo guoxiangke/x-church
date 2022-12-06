@@ -17,8 +17,8 @@ class SocialTelephoneUpdate extends Component
         'social.telephone' => 'numeric,max:10',
     ];
 
-    // public function updated($name, $value)
-    // {
-    //     $this->eventEnroll->update([$name=>$value]);
-    // }
+    public function updated($name, $value)
+    {
+        $this->social->update([$name=>$value]);
+    }
 }
