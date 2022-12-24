@@ -74,7 +74,7 @@ class CheckInController extends Controller
         }
         $code6 = '123456';
         if(!$isBind) {
-            $code6 = (int) (random_int(1, 9) . substr(now()->valueOf(), -5)) - $user_id%100;
+            $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
             Cache::put($code6, compact('social_id','organization_id','user_id'), 60);
         }
         $organization = $event->organization;
