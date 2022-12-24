@@ -12,13 +12,13 @@
 		            <div class="weui-msg__custom-area">
 		              <ul class="weui-form-preview__list">
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">名称</label><p class="weui-form-preview__value">{{$event->name}}</p></li>
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("D M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("D M j H:i")}}</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">简介</label><p class="weui-form-preview__value">{{$event->description}}</p></li>
 		              </ul>
-		              <br><br>
 		            </div>
 		            @endif
 
 			        @if(!$isBind)
+		              <br><br>
 			        <div class="weui-msg__tips-area">
 			          <p class="weui-msg__tips">及时获取活动动态？请微信发送 <span style="font-size: 24px">{{$code6}}</span>  给<a style="color: #fff;" href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea">{{$organization->wechat_ai_title??'AI助理'}}微信</a><br/>此验证码60s内有效！</p>
 			        </div>

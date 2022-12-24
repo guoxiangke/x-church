@@ -17,8 +17,6 @@
                       <input wire:model="eventEnroll.count_child" name="count_child" class="showPicker2 weui-input  weui-cell__control weui-cell__control_flex" type="text" pattern="[0-9]" placeholder="请输入儿童数量" value=""/>
                   </div>
               </div>
-
-
             </div>
           </div>
     </div>
@@ -29,7 +27,7 @@
             <div class="weui-cells weui-cells_form">
                 <div class="weui-cell weui-cell_active">
                     <div class="weui-cell__bd">
-                        <textarea wire:model="eventEnroll.remark" class="weui-textarea" placeholder="您的声音至关重要" rows="3"></textarea>
+                        <textarea id="textarea" wire:model="eventEnroll.remark" class="weui-textarea" placeholder="您的声音至关重要" rows="3"></textarea>
                         <div role="option" aria-live="polite" class="weui-textarea-counter"><span>0</span>/200</div>
                     </div>
                 </div>
