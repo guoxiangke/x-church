@@ -7,6 +7,7 @@ use Laravel\Nova\Metrics\Trend;
 
 class ContactsPerMonth extends Trend
 {
+    public $width = 'full';
     /**
      * Calculate the value of the metric.
      *

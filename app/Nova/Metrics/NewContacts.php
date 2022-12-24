@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class NewContacts extends Value
 {
+    public $width = 'full';
     /**
      * Calculate the value of the metric.
      *
@@ -18,12 +19,12 @@ class NewContacts extends Value
     {
         
         return $this->count($request, \App\Models\Contact::class);
-        
+
         $userId = $request->user()->id;
         if($userId === 1) return $this->count($request, \App\Models\Contact::class);
         
         $orgId = \App\Models\Organization::where('user_id', $request->user()->id)->firstOrFail()->id;
-
+        //todo
         return $this->count($request, \App\Models\Contact::class, 'filterByOrg');
 
         

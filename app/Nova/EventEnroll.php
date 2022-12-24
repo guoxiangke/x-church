@@ -56,14 +56,21 @@ class EventEnroll extends Resource
      */
     public function fields(NovaRequest $request)
     {
+        $social = \App\Models\Social::where('user_id', $this->user_id)->first();
+        $avatar = $social?$social->avatar:'';
+        $telephone = $social?$social->telephone:'';
         return [
-            ID::make()->sortable(),
-            Text::make('Avatar', function () {
-                $social = \App\Models\Social::where('user_id', $this->user_id)->first();
-                $avatar = $social?$social->avatar:'';
+            // ID::make()->sortable(),
+            Text::make('Avatar', function () use($avatar) {
                 return '<img style="max-width:45px;" src="'.$avatar.'"></img>';
             })->asHtml()->onlyOnIndex(),
             BelongsTo::make('user')->rules('required', 'string', 'max:255'),
+            Text::make('count_adult')->onlyOnIndex(),
+            Text::make('count_child')->onlyOnIndex(),
+            // Text::make('remark')->onlyOnIndex(),
+            Text::make('telephone', function () use($telephone) {
+                return '<span>'.$telephone.'</span>';
+            })->asHtml()->onlyOnIndex(),
             BelongsTo::make('event')->rules('required', 'string', 'max:255'),
             BelongsTo::make('service')->rules('required', 'string', 'max:255')->hideFromIndex(),
             DateTime::make('enrolled_at'),

@@ -56,13 +56,16 @@ class Service extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            Text::make('Name')->rules('required', 'string', 'max:255'),
+            // ID::make()->sortable(),
+            Text::make('Name', function () {
+                return "<a class='link-default' href='services/{$this->id}'>{$this->name}</a>";
+            })->asHtml()->onlyOnIndex(),
+            Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
             Text::make('QR', function () {
                 $url = Storage::url($this->qrpath);
-                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或分享。</p>";
+
+                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或复制分享以下链接</p><p>".route('service.checkin', $this->hashid)."</p>";
             })->asHtml()->onlyOnDetail(),
-            BelongsTo::make('organization')->rules('required'),
             Text::make('description')->hideFromIndex(),
             DateTime::make('begin_at'),
             Number::make('check_in_ahead')->help('单位：分钟，默认180分钟'),
@@ -74,6 +77,7 @@ class Service extends Resource
             Boolean::make('报名留言','is_need_remark')->nullable(),
             Text::make('直播链接','live_url')->nullable(),
             Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
+            BelongsTo::make('organization')->rules('required'),
 
         ];
     }

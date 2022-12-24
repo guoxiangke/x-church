@@ -44,7 +44,7 @@ class Event extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
@@ -56,13 +56,16 @@ class Event extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable()->hideFromDetail(),
-            BelongsTo::make('organization')->rules('required')->hideFromDetail(),
-            BelongsTo::make('service')->nullable()->hideFromDetail(),
-            Text::make('Name')->rules('required', 'string', 'max:255'),
+            // ID::make()->sortable(),
+            BelongsTo::make('organization')->rules('required')->onlyOnForms(),
+            BelongsTo::make('service')->nullable()->onlyOnForms(),
+            Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
+            Text::make('Name', function () {
+                return "<a class='link-default' href='events/{$this->id}'>{$this->name}</a>";
+            })->asHtml()->onlyOnIndex(),
             Text::make('QR', function () {
                 $url = Storage::url($this->qrpath);
-                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或分享。</p><p>".route('event.checkin', $this->hashid)."</p>";
+                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或复制分享以下链接</p><p>".route('event.checkin', $this->hashid)."</p>";
             })->asHtml()->onlyOnDetail(),
             Text::make('description')->hideFromIndex()->hideFromDetail(),
             DateTime::make('begin_at'),
@@ -79,6 +82,9 @@ class Event extends Resource
             Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->hideFromDetail()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
 
             HasMany::make('EventEnrolls'),
+
+            BelongsTo::make('organization')->rules('required')->exceptOnForms(),
+            BelongsTo::make('service')->nullable()->exceptOnForms(),
 
         ];
     }

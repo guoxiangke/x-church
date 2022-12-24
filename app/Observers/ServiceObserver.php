@@ -23,7 +23,7 @@ class ServiceObserver
                 ->format('png')
                 ->eye('square')
                 ->style('dot')
-                ->merge($organization->logo_url??'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png', .3, true)
+                ->merge($organization->logo_url??'https://www.tudingyy.com/wp-content/uploads/2022/06/WechatIMG1064.jpeg', .3, true)
                 ->errorCorrection('H')
                 ->generate(route('service.checkin', $service->hashid), Storage::path($path));
         }

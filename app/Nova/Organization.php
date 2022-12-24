@@ -54,9 +54,11 @@ class Organization extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            BelongsTo::make('user')->rules('required'),
-            Text::make('name')->rules('required', 'string', 'max:255'),
+            // ID::make()->sortable(),
+            Text::make('Name', function () {
+                return "<a class='link-default' href='organizations/{$this->id}'>{$this->name}</a>";
+            })->asHtml()->onlyOnIndex(),
+            Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
             Text::make('name_en')->nullable(),
             Text::make('name_abbr')->nullable(),
             Text::make('name_en_abbr')->nullable(),
@@ -71,6 +73,7 @@ class Organization extends Resource
             Text::make('system_name')->rules('required', 'string', 'max:255'),
             Text::make('wechat_ai_title')->nullable(),
             Text::make('wechat_qr_url')->hideFromIndex(),
+            BelongsTo::make('user')->rules('required'),
 
             HasMany::make('Contacts'),
         ];
