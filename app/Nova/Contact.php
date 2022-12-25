@@ -14,7 +14,7 @@ use App\Nova\Metrics\ContactsPerMonth;
 
 class Contact extends Resource
 {
-    public static $displayInNavigation = false;
+    // public static $displayInNavigation = false;
     
     // 限制 owner
     public static function indexQuery(NovaRequest $request, $query)
@@ -52,7 +52,7 @@ class Contact extends Resource
      * @var array
      */
     public static $search = [
-        'name',
+        'name','name_en','telephone','email'
     ];
 
     /**
@@ -64,10 +64,13 @@ class Contact extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-            BelongsTo::make('organization')->rules('required'),
+            // ID::make()->sortable(),
+            BelongsTo::make('organization')->rules('required')->onlyOnForms(),
+            Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
+            Text::make('Name', function () {
+                return "<a class='link-default' href='contacts/{$this->id}'>{$this->name}</a>";
+            })->asHtml()->onlyOnIndex(),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
-            Text::make('name')->rules('required', 'string', 'max:255'),
             Text::make('sex')->rules('required', 'string', 'max:255'),
             DateTime::make('birthday')->rules('required', 'string', 'max:255'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
@@ -76,6 +79,7 @@ class Contact extends Resource
             DateTime::make('date_join')->rules('required', 'string', 'max:255'),
             Text::make('reference_id')->rules('required', 'string', 'max:255'),
             Text::make('remark')->rules('required', 'string', 'max:255'),
+            BelongsTo::make('organization')->rules('required')->exceptOnForms(),
         ];
     }
 
