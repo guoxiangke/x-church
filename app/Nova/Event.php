@@ -78,6 +78,7 @@ class Event extends Resource
             Boolean::make('取消报名','cancel_ahead_hours')->hideFromDetail(),
             Boolean::make('报名留言','is_need_remark')->hideFromDetail(),
             Boolean::make('须留电话', 'is_need_telephone')->nullable(),
+            Boolean::make('显示统计', 'is_show_avatar')->nullable(),
             Text::make('直播链接','live_url')->nullable()->hideFromDetail(),
             Text::make('活动周期计划','rrule')->nullable()->hideFromIndex()->hideFromDetail()->help('<a href="https://jakubroztocil.github.io/rrule/">Gen RRULE</a> copy rule.toString() from second line, include RRULE'),
 

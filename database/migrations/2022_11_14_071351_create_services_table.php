@@ -30,6 +30,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('cancel_ahead_hours')->default(3)->comment('提前几小时，不可以取消报名');
             $table->boolean('is_multi_enroll')->nullable()->comment('成人+儿童参，一人报名多人，null关闭功能');
             $table->boolean('is_need_remark')->nullable()->comment('报名时是否收集留言，null关闭功能');
+            $table->boolean('is_show_avatar')->nullable()->comment('是否显示头像与人数');
             $table->softDeletes();
             $table->timestamps();
         });

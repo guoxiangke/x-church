@@ -46,12 +46,124 @@
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("M j H:i")}}</p></li><li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时长</label><p class="weui-form-preview__value">{{$event->duration_hours}}小时</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">签到时间</label><p class="weui-form-preview__value">开始前{{$event->check_in_ahead}}分钟</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">当前时间</label><p class="weui-form-preview__value">{{now()->format("M j H:i Y D")}}</p></li>
+		                @if($event->is_show_avatar)
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人数</label><p class="weui-form-preview__value">{{$socials->count()}}</p></li>
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人员</label><p class="weui-form-preview__value"> 
+		                	<section class="avatars-group p-3 stacked">
+						      @foreach($socials as $social)
+						      <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$social->avatar}}" alt="Barry Morgan"></div></span></span></div>
+						      @endforeach
+						  </section>
+		                </p></li>
+		                @endif
 		              </ul>
 		            </div>
 		            <div><a href="http://maps.google.com/maps?q={{$event->address}}" role="button" class="weui-btn weui-btn_disabled weui-btn_primary">查看活动地点</a></div>
 		            @endif
-
 		        </div>
+
+      <style type="text/css">
+			.v-avatar{
+	      		width: 30px;
+	      		height: 30px;
+	      	}
+			.avatars-group.grid {
+			  display: grid;
+			  grid-gap: 8px;
+			  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+			}
+			.avatars-group.stacked {
+			  display: flex;
+			  flex-direction: row;
+			  direction: ltr;
+			  max-width: 100%;
+			  overflow: hidden;
+			  overflow-x: auto;
+			  white-space: nowrap;
+			}
+			.avatars-group.stacked > * {
+			  margin-right: -8px;
+			}
+			.avatars-group.stacked > *:last-of-type {
+			  padding-right: 16px;
+			}
+			.avatars-group__item {
+			  cursor: default;
+			  transition: all 0.1s ease-out;
+			}
+			.avatars-group__item.more {
+			  align-items: center;
+			  display: flex;
+			}
+			.avatars-group__item.more:hover {
+			  transform: none;
+			}
+			.avatars-group__item:hover {
+			  transform: translateY(-4px);
+			  z-index: 1;
+			}
+			 
+
+			.avatars-group .v-avatar span {
+			  align-items: center;
+			  display: flex;
+			  font-size: 110%;
+			  font-weight: 700;
+			  height: 100%;
+			  justify-content: center;
+			  letter-spacing: 0.1rem;
+			  text-shadow: 0px 0px 2px rgba(0,0,0,0.56);
+			  width: inherit;
+			}
+
+
+			.v-avatar img {
+			  border-radius: 50%;
+			  display: inline-flex;
+			  height: inherit;
+			  width: inherit;
+			}
+			 
+			.avatars-group .v-avatar img {
+			  padding: 2px;
+			}
+			.avatars-group .v-avatar span {
+			  align-items: center;
+			  display: flex;
+			  font-size: 110%;
+			  font-weight: 700;
+			  height: 100%;
+			  justify-content: center;
+			  letter-spacing: 0.1rem;
+			  text-shadow: 0px 0px 2px rgba(0,0,0,0.56);
+			  width: inherit;
+			}
+			.v-avatar.bordered {
+			  box-shadow: 0px 0px 0px 2px #fff inset;
+			}
+			.v-avatar.bordered img {
+			  padding: 2px;
+			}
+			.v-avatar.bordered.small {
+			  box-shadow: 0px 0px 0px 1px #fff inset;
+			}
+			.v-avatar.bordered.small img {
+			  padding: 1px;
+			}
+
+			.avatars-group .v-avatar {
+			  box-shadow: 0px 0px 0px 2px #fff inset;
+			}
+			.v-avatar {
+			  align-items: center;
+			  border-radius: 50%;
+			  display: inline-flex;
+			  justify-content: center;
+			  position: relative;
+			  text-align: center;
+			  vertical-align: middle;
+			}
+      </style>
 
 		        <div class="weui-msg__extra-area">
 		            <div class="weui-footer">

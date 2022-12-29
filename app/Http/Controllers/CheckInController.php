@@ -80,12 +80,19 @@ class CheckInController extends Controller
             Cache::put($code6, compact('social_id','organization_id','user_id'), 60);
         }
         $organization = $event->organization;
+        $eventEnrolls = EventEnroll::where(['event_id' => $event->id])->orderBy('updated_at','desc')->pluck('user_id')->toArray();
+        $ids_ordered = implode(',', $eventEnrolls);
+        // EventEnroll(user_id) -> User ?-> Social
+        $socials = Social::whereIn('user_id', $eventEnrolls)
+            ->orderByRaw("FIELD(user_id, $ids_ordered)")
+            ->get();
         $data = compact(
             'event',
             'organization',
             'code6',
             'isBind',
             'social',//?
+            'socials',
         );
 
         $eventEnroll = EventEnroll::firstWhere([
