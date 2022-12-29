@@ -14,7 +14,7 @@ use Cookie;
 class CheckInController extends Controller
 {
     //$service 一定是周期性的，rrule为必选项
-    public function serviceCheck(Request $request, Service $service){
+    public function serviceRedirectToEvent(Request $request, Service $service){
         $event = $service->events()->orderBy('created_at', 'desc')->first();
 
         $isNeedCreate = false;
@@ -34,7 +34,9 @@ class CheckInController extends Controller
             $rrule = null;//周期性创建的1次性活动
             $event = Event::create(array_merge($data, compact('rrule','name','service_id','begin_at')));
         }
-        return $this->check($event);
+        // 做一次跳转，为了纪录新人从哪里event来的。
+        // TODO 统计
+        return redirect()->route('event.checkin', [$event]);
     }
     public function eventCheck(Request $request, Event $event){
         return $this->check($event);

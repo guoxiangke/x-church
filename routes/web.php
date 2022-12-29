@@ -36,6 +36,9 @@ $loginNameByEnv = $isLocal?'login.weixin':'login';
 Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name($loginNameByEnv);
 Route::get('/login/wechat/callback', [WeixinController::class, 'weixinlogin'])->name('login.weixin.callback');
 
+// 跳转到/events/{event}/check-in-out 再登录认证，为了纪录新人从哪里event来的。
+Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceRedirectToEvent'])->name('service.checkin');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -56,7 +59,7 @@ Route::middleware([
     // /services/{service}/check-in-out
     // /events/{event}/check-in-out
     // https://github.com/mtvs/eloquent-hashids
-    Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
+    // Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
     Route::get('/e/{event:hashid}',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
 
 

@@ -31,6 +31,7 @@ return new class extends Migration
             // 绑定手机后，可以用来登陆
             $table->string('telephone', 22)->nullable()->index()->comment('with(+1)');
             
+            $table->foreignId('event_id')->nullable()->comment('来源event');
             $table->softDeletes();
             $table->timestamps();
         });
