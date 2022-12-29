@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Organization;
 use App\Models\Social;
 use App\Models\Contact;
+use App\Models\Event;
 use App\Services\Xbot;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +81,15 @@ class WeixinController extends Controller
             }
             //执行登录！
             Auth::loginUsingId($social->user_id, true);//自动登入！
+        }
+        // 用户第一次 来源event
+        if($social->wasRecentlyCreated){
+            $intendedUrl = session('url.intended');
+            if(Str::contains($intendedUrl,'/e/')){
+                $hashid = basename($intendedUrl);
+                $event = Event::findByHashid($hashid);
+                $social->update(['event_id' => $event->id]);
+            }
         }
 
         return Redirect::intended('dashboard');
