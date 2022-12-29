@@ -81,4 +81,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function social(){
+        return $this->hasOne(Social::Class);
+    }
+    
+    // Add a routeNotificationForTwilio method or a phone_number attribute to your notifiable.
+    public function routeNotificationForTwilio()
+    {
+        return $this->social->telephone??env('TWILIO_DEBUG_TO');
+    }
 }
