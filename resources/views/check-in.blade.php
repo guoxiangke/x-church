@@ -46,7 +46,7 @@
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("M j H:i")}}</p></li><li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时长</label><p class="weui-form-preview__value">{{$event->duration_hours}}小时</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">签到时间</label><p class="weui-form-preview__value">开始前{{$event->check_in_ahead}}分钟</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">当前时间</label><p class="weui-form-preview__value">{{now()->format("M j H:i Y D")}}</p></li>
-		                @if($event->is_show_avatar)
+		                @if($event->is_show_avatar && isset($socials))
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人数</label><p class="weui-form-preview__value">{{$socials->count()}}</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人员</label><p class="weui-form-preview__value"> 
 		                	<section class="avatars-group p-3 stacked">
