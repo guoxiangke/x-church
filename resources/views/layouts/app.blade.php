@@ -10,6 +10,12 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
+        <link rel="icon" type="image/png" sizes="16x16" href="https://wj.qq.com/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://wj.qq.com/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://wj.qq.com/favicon-32x32.png">
+        <link rel="mask-icon" href="https://wj.qq.com/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="manifest" href="https://wj.qq.com/site.webmanifest">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
