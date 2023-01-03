@@ -39,15 +39,9 @@ class Organization extends Model
         return $this->hasMany(Contact::class);
     }
 
-    public function send($content, $wxid)
+    public function wxNotify($data)
     {
         return Http::withToken($this->wechat_ai_token??config('services.xbot.token'))
-            ->post(config('services.xbot.endpoint'), [
-                'type' => 'text',
-                'to' => $wxid,
-                'data' => [
-                    'content' => $content
-                ],
-            ]);
+            ->post(config('services.xbot.endpoint'), $data);
     }
 }

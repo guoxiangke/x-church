@@ -72,6 +72,7 @@ class Organization extends Resource
             Text::make('contact_fields')->hideFromIndex(),
             Text::make('system_name')->rules('required', 'string', 'max:255'),
             Text::make('wechat_ai_title')->nullable(),
+            Text::make('wechat_ai_token')->nullable(),
             Text::make('wechat_qr_url')->hideFromIndex(),
             BelongsTo::make('user')->rules('required'),
 

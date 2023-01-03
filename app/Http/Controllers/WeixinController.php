@@ -96,7 +96,7 @@ class WeixinController extends Controller
     }
 
 
-    public function xbotResponse(Request $request)
+    public function xbotResponse(Request $request, Organization $organization)
     {
         // 验证消息
         if(!isset($request['msgid']) || $request['self'] == true)  return response()->json(null);
@@ -125,12 +125,23 @@ class WeixinController extends Controller
                     unset($caches['social_id']);//Contact 里没有 social_id
                     $contact = Contact::firstOrCreate($caches);//compact('social_id','organization_id','user_id')
                     $content = "恭喜你绑定成功！";//点此更新联系人信息$contact->link
-                    return app(Xbot::class)->send($content, $wxid);
-                    // 恭喜你绑定成功！点此更新联系人信息 $contact->link
+                    // $name = $organization->name;
+                    // 欢迎加入xxx大家庭。
+                    // 恭喜你绑定成功！TODO 点此更新联系人信息 $contact->link
                 }else{
-                    $content = "验证码已过期或无效，请重新扫码绑定";//$contact->link
-                    return app(Xbot::class)->send($content, $wxid);
+                    $content = "验证码已过期或无效，请重新获取！";//$contact->link
                 }
+
+                $data = [
+                    'type' => 'text',
+                    'to' => $wxid,
+                    'data' => [
+                        'content' => $content
+                    ]
+                ];
+                // 随意找一个来调用默认bot发送 6/1
+                if(!$organization) $organization = Organization::find(6); 
+                return $organization->wxNotify($data);
             }
         }
         // // 查找或存储用户

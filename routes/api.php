@@ -18,4 +18,4 @@ use App\Http\Controllers\WeixinController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/webhook/xbot', [WeixinController::class, 'xbotResponse']);
+Route::post('/webhook/xbot/{organization?}', [WeixinController::class, 'xbotResponse']);
