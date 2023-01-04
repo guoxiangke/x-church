@@ -77,7 +77,7 @@ class CheckInController extends Controller
         $code6 = '123456';
         if(!$isBind) {
             $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
-            Cache::put($code6, compact('social_id','organization_id','user_id'), 60);
+            Cache::put($code6, compact('social_id','organization_id','user_id'), 180);
         }
         $organization = $event->organization;
         $data = compact(
@@ -211,7 +211,7 @@ class CheckInController extends Controller
                     'status' => 6,
                     'title' => '签到未开放',
                     'eventEnroll' => $eventEnroll,
-                    'message' => "请于开始前{$event->check_in_ahead}分钟签到"
+                    'message' => ""//请于开始前{$event->check_in_ahead}分钟签到
                 ]));
             }
 

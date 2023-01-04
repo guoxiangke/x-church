@@ -23,4 +23,9 @@ class EnrollmentMoreInfo extends Component
     {
         $this->eventEnroll->update([$name=>$value]);
     }
+
+    public function submit()
+    {
+        
+    }
 }

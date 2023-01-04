@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('is_multi_enroll')->nullable()->comment('成人+儿童参，一人报名多人，null关闭功能');
             $table->boolean('is_need_remark')->nullable()->comment('报名时是否收集留言，null关闭功能');
             $table->boolean('is_need_telephone')->nullable()->comment('是否需要收集电话');
+            $table->boolean('is_need_name')->nullable()->comment('是否需要姓名');
             $table->boolean('is_show_avatar')->nullable()->comment('是否显示头像与人数');
             $table->softDeletes();
             $table->timestamps();

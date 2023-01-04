@@ -20,7 +20,7 @@
         <link rel="manifest" href="https://wj.qq.com/site.webmanifest">
         
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
@@ -31,9 +31,6 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="stylesheet" href="https://res.wx.qq.com/t/wx_fed/weui-source/res/2.5.14/weui.css">
         <style>
-            .body {
-                background-color: var(--weui-BG-0);
-            }
             .weui-msg {
                 min-height: 100vh;
             }

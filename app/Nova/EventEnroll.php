@@ -58,6 +58,7 @@ class EventEnroll extends Resource
     {
         $social = \App\Models\Social::where('user_id', $this->user_id)->first();
         $avatar = $social?$social->avatar:'';
+        $nickname = $social?$social->nickname:'';
         $telephone = $social?$social->telephone:'';
         return [
             // ID::make()->sortable(),
@@ -68,6 +69,9 @@ class EventEnroll extends Resource
             Text::make('count_adult')->onlyOnIndex(),
             Text::make('count_child')->onlyOnIndex(),
             // Text::make('remark')->onlyOnIndex(),
+            Text::make('登记姓名', function () use($nickname) {
+                return '<span>'.$nickname.'</span>';
+            })->asHtml()->onlyOnIndex(),
             Text::make('telephone', function () use($telephone) {
                 return '<span>'.$telephone.'</span>';
             })->asHtml()->onlyOnIndex(),

@@ -16,18 +16,22 @@
 		              </ul>
 		            </div>
 		            @endif
-
+		        </div>
+			        @if($social
+			        	&& ($event->is_need_telephone || $event->is_need_name))
+			        	<livewire:social-telephone-update :social="$social" :event="$event"/>
+			        @endif
+				<div class="weui-msg__text-area">
 			        @if(!$isBind)
-		              <br><br>
 			        <div class="weui-msg__tips-area">
-			          <p class="weui-msg__tips">及时获取活动动态？请微信发送 <span style="font-size: 24px">{{$code6}}</span>  给<a style="color: #fff;" href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea">{{$organization->wechat_ai_title??'AI助理'}}微信</a><br/>此验证码60s内有效！</p>
+			          <p class="weui-msg__tips">及时获取活动动态？请微信发送 <span style="font-size: 24px">{{$code6}}</span>  给<a style="color: #fff;" href="{{$organization->wechat_qr_url?:'https://www.yilindeli.com/assets/WechatIMG551.jpeg'}}" role="button" class="weui-btn weui-btn_mini weui-btn_primary weui-wa-hotarea">{{$organization->wechat_ai_title??'AI助理'}}微信</a></p>
 			        </div>
 			        @endif
 
 			        @if(isset($eventEnroll) && !$eventEnroll->canceled_at)
 			        <div class="weui-msg__opr-area">
 		                @if($event->is_need_remark)
-		                <div class="" id="showDialog2" ><a class="weui-btn weui-btn_primary" href="javascript:">报名附言</a></div>
+		                <div class="" id="showDialog2" ><a class="weui-btn weui-btn_primary" href="javascript:">您的留言</a></div>
 		                @endif
 		            	@if($event->cancel_ahead_hours)
 		                	<div class="weui-cells__tips showIOSDialog" id="showDialog3" ><a class="weui-link weui-wa-hotarea" href="javascript:">取消报名</a></div>
@@ -36,9 +40,6 @@
 			        </div>
 			        @endif
 
-			        @if($event->is_need_telephone && $social && !$social->telephone)
-			        <livewire:social-telephone-update :social="$social"/>
-			        @endif
 
 		            @if(!in_array($status,[3,7,0]))
 		            <div class="weui-msg__custom-area">
@@ -50,8 +51,8 @@
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人数</label><p class="weui-form-preview__value">{{$socials->count()}}</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人员</label><p class="weui-form-preview__value"> 
 		                	<section class="avatars-group p-3 stacked">
-						      @foreach($socials as $social)
-						      <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$social->avatar}}" alt="Barry Morgan"></div></span></span></div>
+						      @foreach($socials as $tmpSocial)
+						      <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$tmpSocial->avatar}}" alt="Barry Morgan"></div></span></span></div>
 						      @endforeach
 						  </section>
 		                </p></li>
@@ -99,7 +100,7 @@
 			  transform: none;
 			}
 			.avatars-group__item:hover {
-			  transform: translateY(-4px);
+			  transform: translateY(0px);
 			  z-index: 1;
 			}
 			 
