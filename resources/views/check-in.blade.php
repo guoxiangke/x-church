@@ -1,4 +1,4 @@
-@section('title', $event->name.'|'.$organization->system_name)
+@section('title', $event->name.'|'.$event->organization->system_name)
 
 <x-wechat-layout>
 		<div class="page">

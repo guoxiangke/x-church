@@ -65,7 +65,8 @@ class Event extends Resource
             })->asHtml()->onlyOnIndex(),
             Text::make('QR', function () {
                 $url = Storage::url($this->qrpath);
-                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或复制分享以下链接</p><p>".route('event.checkin', $this->hashid)."</p>";
+                $adminUrl = route('event_enrolls.helper.by.event', $this->hashid);
+                return "<img src='$url' width='150px'/><br/><p>截图/保存以上二维码打印或复制分享以下链接</p><p>".route('event.checkin', $this->hashid)."</p><p><a class='link-default' target='_blank' href='$adminUrl'>$adminUrl</a></p>";
             })->asHtml()->onlyOnDetail(),
             Text::make('description')->hideFromIndex()->hideFromDetail(),
             DateTime::make('begin_at'),

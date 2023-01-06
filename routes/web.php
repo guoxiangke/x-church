@@ -8,6 +8,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\EventEnrollController;
 
+use App\Http\Livewire\EnrollmentList;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -62,6 +64,7 @@ Route::middleware([
     // Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
     Route::get('/e/{event:hashid}',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
 
+    Route::get('/e/{event:hashid}/helper', EnrollmentList::class )->name('event_enrolls.helper.by.event');
 
     // 报名人数更新 /event_enrolls/{{$enrollId}}/update
     Route::get('/event_enrolls/{eventEnroll}/counts', [EventEnrollController::class, 'counts'])->name('event_enrolls.counts');

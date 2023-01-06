@@ -55,6 +55,7 @@ class Contact extends Resource
         'name','name_en','telephone','email'
     ];
 
+    public static $with = ['user.social'];
     /**
      * Get the fields displayed by the resource.
      *
@@ -63,9 +64,11 @@ class Contact extends Resource
      */
     public function fields(NovaRequest $request)
     {
+
         return [
             // ID::make()->sortable(),
             BelongsTo::make('organization')->rules('required')->onlyOnForms(),
+             
             Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
             Text::make('Name', function () {
                 return "<a class='link-default' href='contacts/{$this->id}'>{$this->name}</a>";
@@ -79,6 +82,12 @@ class Contact extends Resource
             DateTime::make('date_join')->rules('required', 'string', 'max:255'),
             Text::make('reference_id')->rules('required', 'string', 'max:255'),
             Text::make('remark')->rules('required', 'string', 'max:255'),
+            Text::make('Avatar', function (){
+                if(!$this->user) return '';
+                $avatar = $this->user->social?$this->user->social->avatar:$this->user->profile_photo_url;
+                return '<img style="max-width:45px;" src="'.$avatar.'"></img>';
+            })->asHtml()->onlyOnIndex(),
+            BelongsTo::make('user')->rules('required')->exceptOnForms(),
             BelongsTo::make('organization')->rules('required')->exceptOnForms(),
         ];
     }
