@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+// use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+// Both HasApiTokens 皆可，已测试
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Metable\Metable;
 use Spatie\Activitylog\Traits\LogsActivity;
