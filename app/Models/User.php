@@ -82,7 +82,19 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'nickname',
+        'avatar_url',
     ];
+
+    public function getNickNameAttribute()
+    {
+        return $this->social?$this->social->name:$this->name;
+    }
+    
+    public function getAvatarUrlAttribute()
+    {
+        return $this->social?$this->social->avatar:$this->profile_photo_url;
+    }
 
     public function social(){
         return $this->hasOne(Social::Class);

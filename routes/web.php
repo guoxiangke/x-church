@@ -8,8 +8,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\EventEnrollController;
 
-use App\Http\Livewire\EnrollmentList;
-
+use App\Http\Livewire\PageEventHelperByEnrollment;
+use App\Http\Livewire\PageEventHelperByContact;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,14 +63,14 @@ Route::middleware([
     // https://github.com/mtvs/eloquent-hashids
     // Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
     Route::get('/e/{event:hashid}',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
-
-    Route::get('/e/{event:hashid}/helper', EnrollmentList::class )->name('event_enrolls.helper.by.event');
-
+    
     // 报名人数更新 /event_enrolls/{{$enrollId}}/update
     Route::get('/event_enrolls/{eventEnroll}/counts', [EventEnrollController::class, 'counts'])->name('event_enrolls.counts');
     // 取消报名？ /event_enrolls/{{$enrollId}}/cancel
     Route::get('/event_enrolls/{eventEnroll}/cancel', [EventEnrollController::class, 'cancel'])->name('event_enrolls.cancel');
 
-
+    Route::get('/e/{event:hashid}/enrollment', PageEventHelperByEnrollment::class)->name('helper.by.enrollment');
+    // 辅助报名：录入的联系人Contact，没有微信，如何为他们签到？
+    Route::get('/e/{event:hashid}/contacts',   PageEventHelperByContact::class )->name('helper.by.contacts');
 
 });

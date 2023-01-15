@@ -19,6 +19,14 @@ class EventEnroll extends Model
         'canceled_at',
     ];
 
+    protected $appends = [
+        'is_checked_in',
+    ];
+
+    public function getIsCheckedInAttribute()
+    {
+        return $this->checked_in_at?true:false;
+    }
 
     public function user(){
         return $this->belongsTo(User::class);

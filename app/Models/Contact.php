@@ -43,4 +43,9 @@ class Contact extends Model
         return $this->hasOne(User::class,'reference_id');
     }
 
+    // 参与过多个活动
+    public function events(){
+        return $this->hasMany(EventEnroll::class);
+    }
+
 }

@@ -15,8 +15,15 @@ return new class extends Migration
     {
         Schema::create('event_enrolls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id');//user_id = 0/null,即手动添加的联系人！
+            // 等contact有了user_id,(Event:update_userID),需要更新这里的user_id
+
+            // 对于极个别没有微信的老人/还没使用系统的人？
+            // 还会涉及到 merge 2个contact为1个？ 在教会范围内，contact 手机号要唯一！那就不merge了，然后contact_id就会固定不会变了！
+            // 即手动添加新人的时候，要检查手机号 组织内部唯一性！
+            $table->foreignId('contact_id')->nullable();
             $table->foreignId('event_id');
+
             // 同时，也可以找出 所有 该 service 的 所有会员。以供double-check0in
             $table->foreignId('service_id')->nullable()->comment('如果一个event属于services的话');
             $table->timestamp('enrolled_at')->comment('报名时间');

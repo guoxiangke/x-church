@@ -59,6 +59,7 @@ class CheckInController extends Controller
     // 其中1 和 3 可以省略。
     // 还可以外加一个 double-check
     protected function check(Event $event){
+        $checkInPage = 'pages.check-in';
         $organization_id = $event->organization_id;
 
         // 随机生成6位数字，30s内过期，以便绑定 user1:social1
@@ -95,7 +96,7 @@ class CheckInController extends Controller
         // 取消报名的情况
         if($eventEnroll&&$eventEnroll->canceled_at){
             //您已取消报名，不可以再次报名！
-            return view('check-in',array_merge($data,[
+            return view($checkInPage,array_merge($data,[
                 'success' => false,
                 'status' => 7,
                 'title' => '失败',
@@ -115,7 +116,7 @@ class CheckInController extends Controller
                 // 活动已结束，会后？小时，还有机会check out(已经报名/check-in的，需要check-out的
                 $eventEnroll->checked_out_at = now();
                 $eventEnroll->save();
-                return view('check-in',array_merge($data,[
+                return view($checkInPage,array_merge($data,[
                     'success' => true,
                     'status' => 0,
                     'title' => '签出成功',
@@ -124,7 +125,7 @@ class CheckInController extends Controller
         }
         // 结束后，不可以check in'
         if(now() > $event->begin_at->addHours($event->duration_hours)){
-            return view('check-in',array_merge($data,[
+            return view($checkInPage,array_merge($data,[
                 'success' => false,
                 'status' => 1,
                 'title' => '签到失败',
@@ -154,7 +155,7 @@ class CheckInController extends Controller
         if($eventEnroll->wasRecentlyCreated){ //这里没有 check-out 签出的可能，因为是第一次扫码
             if($diffMinutes > $event->check_in_ahead ){
                 // 早于3个小时，为报名阶段，而不是check-in
-                return view('check-in', array_merge($data,[
+                return view($checkInPage, array_merge($data,[
                     'success' => true,
                     'title' => '报名成功',
                     'status' => 2,
@@ -169,7 +170,7 @@ class CheckInController extends Controller
                 $eventEnroll->checked_in_at = now();
                 $eventEnroll->save();
                 // 3个小时开始 到结束前，都可以check-in
-                return view('check-in', array_merge($data,[
+                return view($checkInPage, array_merge($data,[
                     'eventEnroll' => $eventEnroll,
                     'success' => true,
                     'status' => 3,
@@ -179,7 +180,7 @@ class CheckInController extends Controller
                 // 必须是扫码（动态：防止作弊，需要每周打印？/静态，省事儿）
             }
 
-            return view('check-in', array_merge($data,[
+            return view($checkInPage, array_merge($data,[
                 'success' => false,
                 'status' => 4,
                 'title' => 'Unknown Error',
@@ -194,7 +195,7 @@ class CheckInController extends Controller
                 $eventEnroll->checked_in_at = now();
                 $eventEnroll->save();
                 // 3个小时开始 到结束前，都可以check-in
-                return view('check-in', array_merge($data,[
+                return view($checkInPage, array_merge($data,[
                     'success' => true,
                     'status' => 5,
                     'title' => '签到成功',
@@ -206,7 +207,7 @@ class CheckInController extends Controller
 
             if($diffMinutes > $event->check_in_ahead){
 
-                return view('check-in', array_merge($data,[
+                return view($checkInPage, array_merge($data,[
                     'success' => false,
                     'status' => 6,
                     'title' => '签到未开放',
@@ -215,7 +216,7 @@ class CheckInController extends Controller
                 ]));
             }
 
-            return view('check-in', array_merge($data,[
+            return view($checkInPage, array_merge($data,[
                 'success' => true,
                 'status' => 7,
                 'eventEnroll' => $eventEnroll,
