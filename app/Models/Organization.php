@@ -45,7 +45,9 @@ class Organization extends Model
 
     public function wxNotify($data)
     {
+        $url = config('services.xbot.endpoint');
+        if($this->id == 1) $url = 'https://wecrm.check-in-out.online/api/wechat/send';
         return Http::withToken($this->wechat_ai_token??config('services.xbot.token'))
-            ->post(config('services.xbot.endpoint'), $data);
+            ->post($url, $data);
     }
 }

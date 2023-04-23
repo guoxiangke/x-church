@@ -139,7 +139,7 @@ class WeixinController extends Controller
                     ]
                 ];
                 // 随意找一个来调用默认bot发送 6/1
-                if(!$organization) $organization = Organization::find(6); 
+                if(!$organization) $organization = Organization::find(1);
                 return $organization->wxNotify($data);
             }
         }
