@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 use Cookie;
 
 
@@ -122,8 +123,10 @@ class WeixinController extends Controller
                         'wxid' => $wxid,
                         'nickname' => $remark,
                     ]);
+                    // Log::error(__CLASS__, [$caches]);
+                    unset($caches['social_id']);
                     $contact = Contact::firstOrCreate($caches);//compact('social_id','organization_id','user_id')
-                    $content = "恭喜你绑定成功！";//点此更新联系人信息$contact->link
+                    $content = "恭喜，绑定成功！";//点此更新联系人信息$contact->link
                     // $name = $organization->name;
                     // 欢迎加入xxx大家庭。
                     // 恭喜你绑定成功！TODO 点此更新联系人信息 $contact->link
