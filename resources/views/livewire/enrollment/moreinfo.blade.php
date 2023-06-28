@@ -10,7 +10,7 @@
     @if($eventEnroll->event->is_multi_enroll)
     <div>
         <style type="text/css">
-          .d-input{
+          .weui-input{
             padding: 15px;
             font-size: 16px;
             width: 20%;
@@ -22,14 +22,22 @@
               <div id="showPicker1" role="button" aria-haspopup="listbox" class=" weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
                 <div class="weui-cell__hd"><label class="weui-label">大人</label></div>
                   <div class="weui-cell__bd">
-                      <input wire:model.lazy="eventEnroll.count_adult"  name="count_adult" class="d-input" type="number" pattern="0-9" placeholder="请输入成人数量" min="1" max="5"  maxlength="2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); if(!this.value) this.value=1;" />
+                      <input 
+                        type="number"
+                        class="weui-input"
+                        wire:model.lazy="eventEnroll.count_adult"  name="count_adult" pattern="0-9"
+                        placeholder="请输入成人数量" min="1" max="5"  maxlength="2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); if(!this.value) this.value=1;" />
                   </div>
               </div>
 
               <div id="showPicker2" role="button" aria-haspopup="listbox" class=" weui-cell weui-cell_active weui-cell_select weui-cell_select-after">
                 <div class="weui-cell__hd"><label class="weui-label">孩子</label></div>
                   <div class="weui-cell__bd">
-                      <input wire:model.lazy="eventEnroll.count_child" name="count_child" class="d-input" type="number" pattern="[0-9]" placeholder="请输入儿童数量" min="0"  max="6"  maxlength="2"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); if(!this.value) this.value=0;" />
+                      <input
+                        type="number"
+                        class="weui-input"
+                        wire:model.lazy="eventEnroll.count_child" name="count_child" pattern="[0-9]"
+                        placeholder="请输入儿童数量" min="0"  max="6"  maxlength="2"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); if(!this.value) this.value=0;" />
                   </div>
               </div>
             </div>
