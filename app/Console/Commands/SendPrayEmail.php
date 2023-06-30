@@ -32,7 +32,8 @@ class SendPrayEmail extends Command
     {
         $organization = Organization::find(8);
         foreach ($organization->contacts as $key => $contact) {
-            if($contact->email)  {
+            // 会员状态：1：active，0：unsubscribe
+            if($contact->email && $contact->status!=0)  {
                 SendPrayEmailQueue::dispatch($contact);
             }
         }

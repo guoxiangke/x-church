@@ -10,6 +10,7 @@ use App\Http\Controllers\EventEnrollController;
 
 use App\Http\Livewire\PageEventHelperByEnrollment;
 use App\Http\Livewire\PageEventHelperByContact;
+use App\Models\Contact;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +31,16 @@ Route::get('/weui/success', function () {
 Route::get('/weui/error', function () {
     return view('weui.warn');
 });
+
+Route::get('/unsubscribe/{contact}', function (Contact $contact) {
+    if($contact->status!=0) {
+        $contact->update(['status'=>0]);
+        $text = 'Unsubscribe Successful';
+    }else{
+        $text = 'You will no longer receive email marketing from this list.';
+    }
+    return [$text];
+})->name('unsubscribe')->middleware('signed');
 
 
 // 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面

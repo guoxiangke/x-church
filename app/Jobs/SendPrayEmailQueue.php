@@ -34,6 +34,6 @@ class SendPrayEmailQueue implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->contact->email)->send(new PrayEmail());
+        Mail::to($this->contact->email)->send(new PrayEmail($this->contact));
     }
 }

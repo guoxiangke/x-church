@@ -9,6 +9,8 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
+use App\Models\Contact;
+use Illuminate\Support\Facades\URL;
 
 class PrayEmail extends Mailable
 {
@@ -19,7 +21,7 @@ class PrayEmail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public Contact $contact)
     {
         //
     }
@@ -45,7 +47,10 @@ class PrayEmail extends Mailable
     public function content()
     {
         return new Content(
-            html: 'emails.pray',
+            view: 'emails.pray',
+            with: [
+                'unsubscribe' => URL::signedRoute('unsubscribe', ['contact' => $this->contact]),
+            ],
         );
     }
 
