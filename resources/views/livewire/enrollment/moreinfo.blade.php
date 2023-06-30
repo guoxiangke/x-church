@@ -53,7 +53,7 @@
                         type="number"
                         class="weui-input"
                         wire:model.lazy="eventEnroll.count_adult"  name="count_adult" pattern="0-9"
-                        placeholder="请输入成人数量" min="1" max="5"  maxlength="2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="if(!this.value) this.value=1;" />
+                        min="1" max="5"  maxlength="2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="if(!this.value) this.value=1;" />
                   </div>
               </div>
 
@@ -64,7 +64,7 @@
                         type="number"
                         class="weui-input"
                         wire:model.lazy="eventEnroll.count_child" name="count_child" pattern="[0-9]"
-                        placeholder="请输入儿童数量" min="0"  max="6"  maxlength="2"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="if(!this.value) this.value=0;" />
+                        min="0"  max="6"  maxlength="2"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" onchange="if(!this.value) this.value=0;" />
                   </div>
               </div>
             </div>
