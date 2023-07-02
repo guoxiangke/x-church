@@ -12,7 +12,9 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
+    // laravel signedRoute 403 Invalid signature.
+    // https://stackoverflow.com/questions/53892356/laravel-5-7-signed-route-returns-403-invalid-signature
 
     /**
      * The headers that should be used to detect proxies.
