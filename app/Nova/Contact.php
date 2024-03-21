@@ -5,7 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -78,11 +78,11 @@ class Contact extends Resource
                 '0' => 'Male',
                 '1' => 'Female',
             ]),
-            DateTime::make('birthday')->rules('required'),
+            Date::make('birthday')->rules('required'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),
             Text::make('address')->rules('required', 'string', 'max:255')->hideFromIndex(),
-            DateTime::make('date_join')->rules('required', 'string', 'max:255'),
+            Date::make('date_join')->rules('required', 'string', 'max:255'),
             Text::make('reference_id')->rules('required', 'string', 'max:255'),
             Text::make('remark')->rules('required', 'string', 'max:255'),
             Text::make('Avatar', function (){
