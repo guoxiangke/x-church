@@ -90,7 +90,7 @@ class Contact extends Resource
                 $avatar = $this->user->social?$this->user->social->avatar:$this->user->profile_photo_url;
                 return '<img style="max-width:45px;" src="'.$avatar.'"></img>';
             })->asHtml()->onlyOnIndex(),
-            BelongsTo::make('user')->rules('required')->exceptOnForms(),
+            BelongsTo::make('user')->exceptOnForms(),
             BelongsTo::make('organization')->rules('required')->exceptOnForms(),
         ];
     }
