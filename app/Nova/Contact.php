@@ -69,22 +69,22 @@ class Contact extends Resource
         return [
             // ID::make()->sortable(),
             BelongsTo::make('organization')->rules('required')->onlyOnForms(),
-            Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
+            Text::make('Name')->onlyOnForms(),
             Text::make('Name', function () {
                 return "<a class='link-default' href='contacts/{$this->id}'>{$this->name}</a>";
             })->asHtml()->onlyOnIndex(),
-            Text::make('name_en')->rules('required', 'string', 'max:255'),
+            Text::make('name_en'),
             Select::make('Sex')->options([
                 '0' => 'Male',
                 '1' => 'Female',
             ]),
-            Date::make('birthday')->rules('required'),
-            Text::make('telephone')->rules('required', 'string', 'max:255'),
-            Text::make('email')->rules('required', 'string', 'max:255'),
-            Text::make('address')->rules('required', 'string', 'max:255')->hideFromIndex(),
-            Date::make('date_join')->rules('required', 'string', 'max:255'),
-            Text::make('reference_id')->rules('required', 'string', 'max:255'),
-            Text::make('remark')->rules('required', 'string', 'max:255'),
+            Date::make('birthday'),
+            Text::make('telephone'),
+            Text::make('email'),
+            Text::make('address')->hideFromIndex(),
+            Date::make('date_join'),
+            Text::make('reference_id'),
+            Text::make('remark'),
             Text::make('Avatar', function (){
                 if(!$this->user) return '';
                 $avatar = $this->user->social?$this->user->social->avatar:$this->user->profile_photo_url;
