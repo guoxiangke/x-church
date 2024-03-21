@@ -73,7 +73,7 @@ class Contact extends Resource
                 return "<a class='link-default' href='contacts/{$this->id}'>{$this->name}</a>";
             })->asHtml()->onlyOnIndex(),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
-            Text::make('sex')->rules('required', 'string', 'max:255'),
+            Text::make('sex'),
             DateTime::make('birthday')->rules('required'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),
