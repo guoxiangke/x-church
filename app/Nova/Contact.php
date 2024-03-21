@@ -68,14 +68,13 @@ class Contact extends Resource
         return [
             // ID::make()->sortable(),
             BelongsTo::make('organization')->rules('required')->onlyOnForms(),
-             
             Text::make('Name')->rules('required', 'string', 'max:255')->onlyOnForms(),
             Text::make('Name', function () {
                 return "<a class='link-default' href='contacts/{$this->id}'>{$this->name}</a>";
             })->asHtml()->onlyOnIndex(),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
             Text::make('sex')->rules('required', 'string', 'max:255'),
-            DateTime::make('birthday')->rules('required', 'string', 'max:255'),
+            DateTime::make('birthday')->rules('required'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),
             Text::make('address')->rules('required', 'string', 'max:255')->hideFromIndex(),
