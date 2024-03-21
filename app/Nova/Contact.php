@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Nova\Metrics\NewContacts;
 use App\Nova\Metrics\ContactsPerDay;
@@ -74,6 +75,10 @@ class Contact extends Resource
             })->asHtml()->onlyOnIndex(),
             Text::make('name_en')->rules('required', 'string', 'max:255'),
             Text::make('sex'),
+            Select::make('Sex')->options([
+                '0' => 'Male',
+                '1' => 'Female',
+            ]),
             DateTime::make('birthday')->rules('required'),
             Text::make('telephone')->rules('required', 'string', 'max:255'),
             Text::make('email')->rules('required', 'string', 'max:255'),
