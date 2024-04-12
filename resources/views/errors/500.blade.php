@@ -11,6 +11,7 @@
             
 
             <img  src="{{ asset('/images/pointer.webp') }}" style="transform: rotate(90deg); position: fixed; bottom: 60px;right: 0;">
+            <div style="font-size:12px;position: fixed; bottom: 10px; text-align:center; width:100%"><a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024061280号-1</a></div>
         </div>
     </div>
 </x-wechat-layout>
