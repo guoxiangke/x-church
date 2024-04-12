@@ -40,6 +40,12 @@
               text-align: left;
               font-size: 14px;
             }
+            a {
+              color: rgba(255, 255, 255, 0.5);
+            }
+            a:visited {
+              color: rgba(255, 255, 255, 0.5);
+            }
         </style>
 
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

@@ -12,11 +12,6 @@
 
             <img  src="{{ asset('/images/pointer.webp') }}" style="transform: rotate(90deg); position: fixed; bottom: 60px;right: 0;">
             <div style="padding:10px; font-size:10px; color: #404040; position: fixed; bottom: 10px; text-align:left; width:100%"><a href="https://beian.miit.gov.cn/" target="_blank">京ICP备2024061280号-1</a></div>
-            <style type="text/css">
-                a,a:visited {
-                  color: rgba(255, 255, 255, 0.5);
-                }
-            </style>
         </div>
     </div>
 </x-wechat-layout>
