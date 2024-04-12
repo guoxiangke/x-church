@@ -41,10 +41,10 @@
               font-size: 14px;
             }
             a {
-              color: rgba(255, 255, 255, 0.5);
+              color: #999;
             }
             a:visited {
-              color: rgba(255, 255, 255, 0.5);
+              color: #666;
             }
         </style>
 
