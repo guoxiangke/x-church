@@ -11,6 +11,7 @@ use App\Http\Controllers\EventEnrollController;
 use App\Http\Livewire\PageEventHelperByEnrollment;
 use App\Http\Livewire\PageEventHelperByContact;
 use App\Models\Contact;
+use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,11 +44,46 @@ Route::get('/unsubscribe/{contact}', function (Contact $contact) {
 })->name('unsubscribe')->middleware('signed');
 
 
-// 'login.weixin' => name('login') 覆盖403登陆跳转。登陆成功，再跳转之前请求的页面
-$isLocal = app()->environment('local');
-$loginNameByEnv = $isLocal?'login.weixin':'login';
-Route::get('/login/wechat', [WeixinController::class, 'weixin'])->name($loginNameByEnv);
-Route::get('/login/wechat/callback', [WeixinController::class, 'weixinlogin'])->name('login.weixin.callback');
+
+// 1.用户访问403 跳转登录 http://oauth2client.test/user/profile
+Route::get('/auth', function () {
+    return Socialite::driver('laravelpassport')->redirect();
+})->name('login');
+
+// 登录成功后，TODO：需要跳转之前访问的403页面
+Route::get('/auth/callback', function () {
+    // 获取用户信息，存储用户、登陆、然后再次跳转。
+    $socialUser = Socialite::driver('laravelpassport')->user();//stateless()
+    $socialUser = $socialUser->user;
+    $avatar = $socialUser['profile_photo_path'];
+    $socialEmail = $socialUser['email'];
+    // 如果已登陆
+    if($user = Auth::user()){
+        // 执行绑定！
+    }else{
+        // 未登录，执行登录！
+        $user = User::whereHasMeta('wxid', $socialEmail)->first();
+        if(!$user){
+            $user = User::create([
+                'name' => $socialUser['name'],
+                'email' => $socialEmail,
+                'email_verified_at' => now(),
+                'password' => Hash::make(Str::random(8)),
+                'remember_token' => Str::random(10),
+                'profile_photo_path' => $avatar,
+            ]);
+        }
+        //执行登录！
+        Auth::loginUsingId($user->id, true);//自动登入！
+    }
+    $user->setMeta('wxid', $socialEmail);
+    $user->update([
+        'name' => $socialUser['name'],
+        'profile_photo_path' => $avatar,
+    ]);
+    return Redirect::intended('dashboard');
+});
+
 
 // 跳转到/events/{event}/check-in-out 再登录认证，为了纪录新人从哪里event来的。
 Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceRedirectToEvent'])->name('service.checkin');

@@ -21,15 +21,6 @@ use Cookie;
 
 class WeixinController extends Controller
 {
-    public function weixin(Request $request){
-        return Socialite::driver('weixin')->redirect();
-    }
-
-    public function weixinlogin(){
-        $socialUser = Socialite::driver('weixin')->user();
-        return $this->bindOrlogin($socialUser, Social::TYPE_WECHAT);
-    }
-
     // 如果绑定过，取出userID, 自动登录，否则 执行绑定过程
     public function bindOrlogin($socialUser, $type)
     {

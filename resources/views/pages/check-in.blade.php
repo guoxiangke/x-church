@@ -17,7 +17,7 @@
 		            </div>
 		            @endif
 		        </div>
-			        @if($social
+			        @if(false
 			        	&& ($event->is_need_telephone || $event->is_need_name))
 			        	<livewire:social-telephone-update :social="$social" :event="$event"/>
 			        @endif
@@ -47,12 +47,12 @@
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时间</label><p class="weui-form-preview__value">{{$event->begin_at->format("M j H:i")}} ～ {{$event->begin_at->addHours($event->duration_hours)->format("M j H:i")}}</p></li><li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">活动时长</label><p class="weui-form-preview__value">{{$event->duration_hours}}小时</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">签到时间</label><p class="weui-form-preview__value">开始前{{$event->check_in_ahead}}分钟</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">当前时间</label><p class="weui-form-preview__value">{{now()->format("M j H:i Y D")}}</p></li>
-		                @if($event->is_show_avatar && isset($socials))
-		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人数</label><p class="weui-form-preview__value">{{count($socials)}}</p></li>
+		                @if($event->is_show_avatar)
+		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人数</label><p class="weui-form-preview__value">{{$eventEnrolls->count()}}</p></li>
 		                <li role="option" class="weui-form-preview__item"><label class="weui-form-preview__label">报名人员</label><p class="weui-form-preview__value"> 
 		                	<section class="avatars-group p-3 stacked">
-						      @foreach($socials as $tmpSocial)
-						      <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$tmpSocial->avatar}}" alt="Barry Morgan"></div></span></span></div>
+						      @foreach($eventEnrolls as $eer)
+						      <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$eer->user->profile_photo_url}}" alt=""></div></span></span></div>
 						      @endforeach
 						  </section>
 		                </p></li>
@@ -186,8 +186,8 @@
 		                <div class="weui-half-screen-dialog__hd">
 		                  <div class="weui-half-screen-dialog__hd__main">
 		                    <div class="weui-flex" style="align-items: center; font-size: 14px;">
-		                      <img src="{{$social->avatar??'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII='}}" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
-		                      {{$social->name??'昵称'}}
+		                      <img src="{{$user->profile_photo_path??'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAMAAABgZ9sFAAAAVFBMVEXx8fHMzMzr6+vn5+fv7+/t7e3d3d2+vr7W1tbHx8eysrKdnZ3p6enk5OTR0dG7u7u3t7ejo6PY2Njh4eHf39/T09PExMSvr6+goKCqqqqnp6e4uLgcLY/OAAAAnklEQVRIx+3RSRLDIAxE0QYhAbGZPNu5/z0zrXHiqiz5W72FqhqtVuuXAl3iOV7iPV/iSsAqZa9BS7YOmMXnNNX4TWGxRMn3R6SxRNgy0bzXOW8EBO8SAClsPdB3psqlvG+Lw7ONXg/pTld52BjgSSkA3PV2OOemjIDcZQWgVvONw60q7sIpR38EnHPSMDQ4MjDjLPozhAkGrVbr/z0ANjAF4AcbXmYAAAAASUVORK5CYII='}}" alt="" style="width: 24px; margin-right: 8px; border-radius: 50%; display: block;">
+		                      {{$user->name??'昵称'}}
 		                    </div>
 		                  </div>
 		                </div>

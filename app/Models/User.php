@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Plank\Metable\Metable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -52,6 +53,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo_path',
     ];
 
     /**
@@ -85,6 +87,15 @@ class User extends Authenticatable
         'nickname',
         'avatar_url',
     ];
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        if($this->profile_photo_path && Str::startsWith($this->profile_photo_path, 'http')) return $this->profile_photo_path;
+        return $this->profile_photo_path
+                    ? Storage::disk($this->profilePhotoDisk())->url($this->profile_photo_path)
+                    : $this->defaultProfilePhotoUrl();
+    }
+
 
     public function getNickNameAttribute()
     {

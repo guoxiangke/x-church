@@ -33,5 +33,8 @@ class AppServiceProvider extends ServiceProvider
         }
         Event::observe(EventObserver::class);
         Service::observe(ServiceObserver::class);
+        \Illuminate\Support\Facades\Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
+            $event->extendSocialite('laravelpassport', \SocialiteProviders\LaravelPassport\Provider::class);
+        });
     }
 }

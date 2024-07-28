@@ -65,28 +65,29 @@ class CheckInController extends Controller
         // 随机生成6位数字，30s内过期，以便绑定 user1:social1
         $user = auth()->user();
         $user_id = $user->id;
-        $social = Social::where('user_id', $user_id)->first();
-        if($user_id == 1){
-            // TODO 是否绑定
-            $social_id = $social?$social->id:null;
-            $isBind = 1;
-        }else{
-            $social = Social::where('user_id', $user_id)->firstOrFail();
-            $social_id = $social->id;
-            $isBind = $social->wxid;
-        }
-        $code6 = '123456';
-        if(!$isBind) {
-            $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
-            Cache::put($code6, compact('social_id','organization_id','user_id'), 180);
-        }
+        // $social = Social::where('user_id', $user_id)->first();
+        // if($user_id == 1){
+        //     // TODO 是否绑定
+        //     $social_id = $social?$social->id:null;
+        //     $isBind = 1;
+        // }else{
+        //     $social = Social::where('user_id', $user_id)->firstOrFail();
+        //     $social_id = $social->id;
+        //     $isBind = $social->wxid;
+        // }
+        // $code6 = '123456';
+        // if(!$isBind) {
+        //     $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
+        //     Cache::put($code6, compact('social_id','organization_id','user_id'), 180);
+        // }
         $organization = $event->organization;
+        $isBind = true;
         $data = compact(
             'event',
             'organization',
-            'code6',
+            // 'code6',
             'isBind',
-            'social',//?
+            // 'social',//?
         );
 
         $eventEnroll = EventEnroll::firstWhere([
@@ -142,15 +143,10 @@ class CheckInController extends Controller
             ]);
         }
         
-        $eventEnrolls = EventEnroll::where(['event_id' => $event->id])->orderBy('updated_at','desc')->pluck('user_id')->toArray();
-        $ids_ordered = implode(',', $eventEnrolls);
-        // dd($eventEnrolls,$ids_ordered);
-        // EventEnroll(user_id) -> User ?-> Social
-        $socials = Social::whereIn('user_id', $eventEnrolls)
-            ->orderByRaw("FIELD(user_id, $ids_ordered)")
-            ->get();
-        $data['socials'] = $socials->count()?$socials:[];
-
+        $eventEnrolls = EventEnroll::with('user')
+            ->where(['event_id' => $event->id])
+            ->orderBy('updated_at','desc')->get();
+        $data['eventEnrolls'] = $eventEnrolls;
         $diffMinutes = now()->diffInMinutes($event->begin_at,false);
         if($eventEnroll->wasRecentlyCreated){ //这里没有 check-out 签出的可能，因为是第一次扫码
             if($diffMinutes > $event->check_in_ahead ){

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "guoxiangke/laravelpassport": "4.3.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel-notification-channels/twilio": "^3.2",
         "laravel/framework": "^9.19",
