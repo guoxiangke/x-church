@@ -50,5 +50,11 @@ return [
       'host' => env('LARAVELPASSPORT_HOST'),
       'userinfo_uri' => env('LARAVELPASSPORT_URLINFO_URI'),
     ],
+    
+    'textbee' => [
+        'api_key' => env('TEXTBEE_API_KEY'),
+        'devices_id' => env('TEXTBEE_DEVICES_ID'),
+        'recipient' => env('TEXTBEE_RECIPIENT'),
+    ],
 
 ];

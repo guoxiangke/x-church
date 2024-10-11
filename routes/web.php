@@ -54,18 +54,20 @@ Route::get('/auth', function () {
 Route::get('/auth/callback', function () {
     // 获取用户信息，存储用户、登陆、然后再次跳转。
     $socialUser = Socialite::driver('laravelpassport')->user();//stateless()
+    // dd($socialUser);
     $socialUser = $socialUser->user;
-    $avatar = $socialUser['profile_photo_path'];
+    $avatar = $socialUser['avatar'];
     $socialEmail = $socialUser['email'];
+    $wxid = $socialUser['wxid'];
     // 如果已登陆
     if($user = Auth::user()){
         // 执行绑定！
     }else{
         // 未登录，执行登录！
-        $user = User::whereHasMeta('wxid', $socialEmail)->first();
+        $user = User::whereMeta('wxid', $wxid)->first()?:User::where('email', $socialEmail)->first();
         if(!$user){
             $user = User::create([
-                'name' => $socialUser['name'],
+                'name' => $socialUser['nickname'],
                 'email' => $socialEmail,
                 'email_verified_at' => now(),
                 'password' => Hash::make(Str::random(8)),
@@ -73,12 +75,12 @@ Route::get('/auth/callback', function () {
                 'profile_photo_path' => $avatar,
             ]);
         }
+        $user->setMeta('wxid', $wxid);
         //执行登录！
         Auth::loginUsingId($user->id, true);//自动登入！
     }
-    $user->setMeta('wxid', $socialEmail);
     $user->update([
-        'name' => $socialUser['name'],
+        'name' => $socialUser['nickname'],
         'profile_photo_path' => $avatar,
     ]);
     return Redirect::intended('dashboard');
