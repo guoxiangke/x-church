@@ -99,6 +99,24 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+
+Route::get('/devotional', function () {
+    $eventEnrolls = User::whereNot('profile_photo_path')->get();
+    
+    $date = now()->format('md');
+    $dateY = now()->format('Y');
+    $dateN = now()->format('n');
+    $dateJ = now()->format('j');
+    $url = "https://mbcotc.david777.net/devotional/CN/{$date}.html";
+    $html = file_get_contents($url);
+    $pattern = '/<div class="theme-default-content" vp-content>([\s\S]*?)<\/div>/';
+    preg_match($pattern, $html, $matches);
+    $content = $matches[1];
+    $systemName = '天普市國語浸信會靈修';
+    $title = "{$dateN}月{$dateJ}日｜{$systemName}";
+    return view('devotional',compact('eventEnrolls','content','title','systemName','dateY'));
+})->name('devotional');
+
     // Route::resources([
     //     'organization'      => OrganizationController::class,
     //     'services'     => ServiceController::class,
