@@ -12,17 +12,18 @@
     {!! $content !!}
 
     <div style="text-align: center;">
-        <i role="img" title="成功" aria-describedby="tip_1" class="weui-icon-success weui-icon_msg"></i>
-            <h3 class="icon-box__title">🎉 恭喜，挑战成功 🎉</h3>
-            <div class="icon-box__desc" id="tip_1">已有 {{count($eventEnrolls)}} 人完成了今日打卡！</div>
+        <i role="img" id="icoSuccess" style="display:none;" title="成功" aria-describedby="tip_1" class="weui-icon-success weui-icon_msg"></i>
+
+        <a href="javascript:" id="checkIn" role="button" class="weui-btn weui-btn_default" onclick="scrollToBottom();this.style.display='none'" id="showToast">点此打卡</a>
+            <h3 id="icoSuccessText" style="display:none;" class="icon-box__title">🎉 恭喜，挑战成功 🎉</h3>
+            <div id="icoSuccessInfo" class="icon-box__desc"  style="display:none;"  id="tip_1">已有 {{count($eventEnrolls)}} 人完成了今日打卡！</div>
             <br>
-        <section class="avatars-group stacked">
+        <section id="icoSuccessUsers" style="display:none;" class="avatars-group stacked">
           @foreach($eventEnrolls as $eer)
           <div class="avatars-group__item"><span class="v-tooltip v-tooltip--bottom"><span><div class="v-avatar"> <img src="{{$eer->profile_photo_url}}" alt=""></div></span></span></div>
           @endforeach
       </section>
     </div>
-    </section>
 
   </article>
 </div>
@@ -54,6 +55,19 @@
             // 如果滚动位置接近底部（允许误差1像素）
             if (scrollPosition >= scrollHeight - 1) {
                 console.log('用户已滚动到页面底部！');
+
+                var $showToast = $('#showToast');
+                var $icoSuccessText = $('#icoSuccessText');
+                var $icoSuccess = $('#icoSuccess');
+
+                $showToast.fadeOut(100);
+                $('#checkIn').fadeOut(100);
+                
+                $icoSuccess.fadeIn(100);
+                $icoSuccessText.fadeIn(100);
+                $('#icoSuccessInfo').fadeIn(100);
+                $('#icoSuccessUsers').fadeIn(100);
+
                 confetti({
                   particleCount: 100,
                   spread: 70,
@@ -63,6 +77,15 @@
                 hasReachedBottom = true;
             }
         });
+
+        function scrollToBottom() {
+            // Smooth scroll to the bottom
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth" // Enables smooth scrolling
+            });
+        }
+         
     </script>
     <style type="text/css">
         p {
