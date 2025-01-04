@@ -17,6 +17,7 @@ class EventEnrollObserver
      */
     public function created(EventEnroll $eventEnroll)
     {
+        // $eventEnroll=EventEnroll::find(1149)
         $organization = $eventEnroll->service->organization;
         // LCC 信义会十架堂
         if($organization->id == 7){
@@ -24,11 +25,11 @@ class EventEnrollObserver
                 ->orderBy('updated_at','desc')
                 ->get();
 
-            Http::withHeaders([
-                'x-api-key' => config('services.textbee.api_key'),
+            $res = Http::withHeaders([
+                'Authorization' => 'Bearer '. config('services.sms.token'),
                 'Content-Type' => 'application/json',
-            ])->post('https://api.textbee.dev/api/v1/gateway/devices/'.config('services.textbee.devices_id').'/sendSMS', [
-                'recipients' => [$organization->telephone],
+            ])->post(config('services.sms.endpoint', [
+                'phoneNumber' => $organization->telephone,
                 'message' => $eventEnroll->event->name."\n新增1人报名：".$eventEnroll->user->name."\n当前成人：".$eventEnrolls->sum('count_adult')."\n当前儿童：".$eventEnrolls->sum('count_child') ."\n当前时间：".now('America/Los_Angeles')->format('m/d H:i'),
             ]);
         }

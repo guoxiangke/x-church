@@ -56,5 +56,10 @@ return [
         'devices_id' => env('TEXTBEE_DEVICES_ID'),
         'recipient' => env('TEXTBEE_RECIPIENT'),
     ],
+    
+    'sms' => [
+        'endpoint' = env('SMS_ENDPOINT'),
+        'token' => env('SMS_ACCESS_TOKEN'),
+    ],
 
 ];
