@@ -28,7 +28,7 @@ class EventEnrollObserver
             $res = Http::withHeaders([
                 'Authorization' => 'Bearer '. config('services.sms.token'),
                 'Content-Type' => 'application/json',
-            ])->post(config('services.sms.endpoint', [
+            ])->post(config('services.sms.endpoint'), [
                 'phoneNumber' => $organization->telephone,
                 'message' => $eventEnroll->event->name."\n新增1人报名：".$eventEnroll->user->name."\n当前成人：".$eventEnrolls->sum('count_adult')."\n当前儿童：".$eventEnrolls->sum('count_child') ."\n当前时间：".now('America/Los_Angeles')->format('m/d H:i'),
             ]);
