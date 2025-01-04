@@ -58,7 +58,7 @@ return [
     ],
     
     'sms' => [
-        'endpoint' = env('SMS_ENDPOINT'),
+        'endpoint' => env('SMS_ENDPOINT'),
         'token' => env('SMS_ACCESS_TOKEN'),
     ],
 
