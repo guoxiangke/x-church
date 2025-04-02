@@ -27,7 +27,7 @@ class EventEnrollObserver
 
 
             $content = $eventEnroll->event->name."\n新增1人报名：".$eventEnroll->user->name."\n当前成人：".$eventEnrolls->sum('count_adult')."\n当前儿童：".$eventEnrolls->sum('count_child') ."\n当前时间：".now('America/Los_Angeles')->format('m/d H:i');
-            if(0||$isSMSenabled)
+
             $res = Http::withHeaders([
                 'Authorization' => 'Bearer '. config('services.sms.token'),
                 'Content-Type' => 'application/json',
@@ -35,7 +35,6 @@ class EventEnrollObserver
                 'phoneNumber' => $organization->telephone,
                 'message' => $content,
             ]);
-
             Http::withHeaders([
                 'Authorization' => 'Bearer '. config('services.xbot.token'),
                 'Content-Type' => 'application/json',
@@ -66,7 +65,6 @@ class EventEnrollObserver
 
                 $content = $eventEnroll->event->name."\n报名人数更新：".$eventEnroll->user->name."\n当前成人：".$eventEnrolls->sum('count_adult')."\n当前儿童：".$eventEnrolls->sum('count_child') ."\n当前时间：".now('America/Los_Angeles')->format('m/d H:i');
 
-                if(0||$isSMSenabled)
                 Http::withHeaders([
                     'x-api-key' => config('services.textbee.api_key'),
                     'Content-Type' => 'application/json',
@@ -74,7 +72,7 @@ class EventEnrollObserver
                     'recipients' => [$organization->telephone],
                     'message' => $content,
                 ]);
-                
+
                 Http::withHeaders([
                     'Authorization' => 'Bearer '. config('services.xbot.token'),
                     'Content-Type' => 'application/json',
