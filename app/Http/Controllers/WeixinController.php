@@ -9,6 +9,7 @@ use App\Models\Organization;
 use App\Models\Social;
 use App\Models\Contact;
 use App\Models\Event;
+use App\Models\CheckIn;
 use App\Services\Xbot;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -137,6 +138,45 @@ class WeixinController extends Controller
                 return $organization->wxNotify($data);
             }
         }
+
+        // 个人或群签到
+
+        
+        // 
+
+        if(in_array($keyword,['签到','打卡','已读','已看','已听','已完成'])){
+            $checkIn = CheckIn::updateOrCreate(
+                ['wxid'=>$wxid,'check_in_at'=>now()->startOfDay()],
+                ['content'=>$keyword,'nickname'=>$remark]
+            );
+            $content = "🌟打卡成功\n👍@{$remark} 你太棒了\n👍卢牧师给你点赞👍👍👍\n✊本次微习惯挑战您已连续坚持了20天。\n您收获了99枚金币🏅\n成功率 99.91%";
+            $data = [
+                'type' => 'text',
+                'to' => $wxid,
+                'data' => [
+                    'content' => $content
+                ]
+            ];
+            // 随意找一个来调用默认bot发送 6/1
+            if(!$organization) $organization = Organization::find(1);
+            $organization->wxNotify($data);
+
+            // 发到群里！
+            if(!$isRoom){
+                $content = "@{$remark} 今日已打卡，我们给他点个赞鼓励一下吧👍";
+                 $data = [
+                    'type' => 'text',
+                    'to' => '38796149771@chatroom',
+                    'data' => [
+                        'content' => $content
+                    ]
+                ];
+                // 随意找一个来调用默认bot发送 6/1
+                if(!$organization) $organization = Organization::find(1);
+                $organization->wxNotify($data);
+            }
+        }
+
         // // 查找或存储用户
         // $customer = Social::first(['wxid'=> $wxid]); // "wxid":"bluesky_still","remark":"AI天空蔚蓝"
 
