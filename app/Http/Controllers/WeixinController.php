@@ -183,7 +183,7 @@ class WeixinController extends Controller
             $organization->wxNotify($data);
 
             // 发到群里！
-            if(!$isRoom){
+            if(!$isRoom && $checkIn->wasRecentlyCreated){
                 $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
                  $data = [
                     'type' => 'text',
