@@ -184,7 +184,7 @@ class WeixinController extends Controller
 
             // 发到群里！
             if(!$isRoom){
-                $content = "✅挑战成功\n🌟我们一起祝@{$remark}有个美好的一天吧🎉";
+                $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
                  $data = [
                     'type' => 'text',
                     'to' => '38796149771@chatroom',
