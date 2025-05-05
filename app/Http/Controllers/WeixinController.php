@@ -11,6 +11,7 @@ use App\Models\Contact;
 use App\Models\Event;
 use App\Models\CheckIn;
 use App\Services\Xbot;
+use App\Services\CheckInStatsService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -142,14 +143,15 @@ class WeixinController extends Controller
         // 个人或群签到
 
         
-        // 
-
         if(in_array($keyword,['签到','打卡','已读','已看','已听','已完成'])){
             $checkIn = CheckIn::updateOrCreate(
                 ['wxid'=>$wxid,'check_in_at'=>now()->startOfDay()],
                 ['content'=>$keyword,'nickname'=>$remark]
             );
-            $content = "🌟打卡成功\n👍@{$remark} 你太棒了\n👍卢牧师给你点赞👍👍👍\n✊本次微习惯挑战您已连续坚持了20天。\n您收获了99枚金币🏅\n成功率 99.91%";
+            $service = new CheckInStatsService($wxid);
+            $stats = $service->getStats();
+
+            $content = "🌟微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['currentStreak']} 天\n您总共收获了 {$stats['total_days']} 枚金币🏅\n👍@{$remark} 你太棒了\n👍卢牧师给一个大大的赞👍👍👍\n大声对自己说：_ _ _ _，今天又是美好的一天✌️";
             $data = [
                 'type' => 'text',
                 'to' => $wxid,
@@ -163,7 +165,7 @@ class WeixinController extends Controller
 
             // 发到群里！
             if(!$isRoom){
-                $content = "@{$remark} 今日已打卡，我们给他点个赞鼓励一下吧👍";
+                $content = "✅ @{$remark} 今日打卡已完成\n我们一起祝贺TA有个美好的一天吧🌟";
                  $data = [
                     'type' => 'text',
                     'to' => '38796149771@chatroom',
