@@ -33,6 +33,7 @@ class CheckInStatsService
                 'missed_percentage' => '0.00',
                 'max_streak' => 0,
                 'missed_dates' => [],
+                'rank' => 0,
             ];
         }
 
@@ -67,9 +68,16 @@ class CheckInStatsService
             'missed_percentage' => $missedPercentage,
             'max_streak' => $this->getMaxStreak(),
             'missed_dates' => $this->getMissedDates(),
+            'rank' => $this->getTodayRank(),
         ];
     }
 
+    // 你是今天第51个签到的！
+    public function getTodayRank(): int
+    {
+        $today = now()->startOfDay();
+        return CheckIn::whereDate('check_in_at', $today)->count();
+    }
 
     // 最大连续打卡天数
     public function getMaxStreak(): int

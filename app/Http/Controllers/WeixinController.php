@@ -94,6 +94,8 @@ class WeixinController extends Controller
     {
         // 验证消息
         if(!isset($request['msgid']) || $request['self'] == true)  return response()->json(null);
+        // 随意找一个来调用默认bot发送 6/1
+        if(!$organization) $organization = Organization::find(1);
 
         $wxidOrCurrentRoom = $request['wxid'];
         $isRoom = Str::endsWith($wxidOrCurrentRoom, '@chatroom');
@@ -134,8 +136,6 @@ class WeixinController extends Controller
                         'content' => $content
                     ]
                 ];
-                // 随意找一个来调用默认bot发送 6/1
-                if(!$organization) $organization = Organization::find(1);
                 return $organization->wxNotify($data);
             }
         }
@@ -143,14 +143,13 @@ class WeixinController extends Controller
         // 个人或群签到
 
         
-        if(in_array($keyword,['签到','打卡','已读','已看','已听','已完成'])){
+        if(in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成'])){
             $checkIn = CheckIn::updateOrCreate(
                 ['wxid'=>$wxid,'check_in_at'=>now()->startOfDay()],
                 ['content'=>$keyword,'nickname'=>$remark]
             );
             $service = new CheckInStatsService($wxid);
             $stats = $service->getStats();
-
 
             $encourages = [
                 "太棒了🌟",
@@ -159,7 +158,7 @@ class WeixinController extends Controller
                 "给身边的人击掌一下吧🙌",
                 "给自己一个微笑😊",
                 "得意的笑一个吧✌️",
-                "给自己一个赞👍",
+                "给自己一个赞吧👍",
                 "庆祝🪅一下吧🤩",
                 "大声对自己说：我赢了🥇",
                 "给自己说一句鼓励的话吧🥳",
@@ -169,7 +168,7 @@ class WeixinController extends Controller
             ];
             $randomEncourage = $encourages[array_rand($encourages)];
 
-            $content = "🌟微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共收获了 {$stats['total_days']} 枚金币\n@{$remark} 你太棒了👍\n卢牧师给一个大大的赞👍👍👍\n{$randomEncourage}";
+            $content = "✅微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共收获了 {$stats['total_days']} 枚星光🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🌟\n卢牧师给一个大大的赞👍\n{$randomEncourage}";
 
             $data = [
                 'type' => 'text',
@@ -178,8 +177,7 @@ class WeixinController extends Controller
                     'content' => $content
                 ]
             ];
-            // 随意找一个来调用默认bot发送 6/1
-            if(!$organization) $organization = Organization::find(1);
+            
             $organization->wxNotify($data);
 
             // 发到群里！
@@ -192,8 +190,6 @@ class WeixinController extends Controller
                         'content' => $content
                     ]
                 ];
-                // 随意找一个来调用默认bot发送 6/1
-                if(!$organization) $organization = Organization::find(1);
                 $organization->wxNotify($data);
             }
         }
