@@ -80,7 +80,7 @@ class CheckInStatsService
     {
         $today = now()->startOfDay();
         return CheckIn::whereDate('check_in_at', $today)
-            ->where('room', $this->wxRoom)
+            ->where('content', $this->wxRoom)
             ->count();
     }
 
