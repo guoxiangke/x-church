@@ -9,16 +9,19 @@ use Carbon\Carbon;
 class CheckInStatsService
 {
     protected $wxid;
+    protected $wxRoom;
 
-    public function __construct(string $wxid)
+    public function __construct(string $wxid, string $wxRoom)
     {
         $this->wxid = $wxid;
+        $this->wxRoom = $wxRoom;
     }
 
     // 计算最近一次中断后的连续打卡天数
     public function getStats(): array
     {
         $dates = CheckIn::where('wxid', $this->wxid)
+            ->where('content', $this->wxRoom)
             ->orderBy('check_in_at')
             ->pluck('check_in_at')
             ->map(fn($dt) => Carbon::parse($dt)->toDateString())
@@ -83,6 +86,7 @@ class CheckInStatsService
     public function getMaxStreak(): int
     {
         $dates = CheckIn::where('wxid', $this->wxid)
+            ->where('content', $this->wxRoom)
             ->orderBy('check_in_at')
             ->pluck('check_in_at')
             ->map(fn($dt) => Carbon::parse($dt)->toDateString())
@@ -115,6 +119,7 @@ class CheckInStatsService
     public function getMissedDates(): array
     {
         $dates = CheckIn::where('wxid', $this->wxid)
+            ->where('content', $this->wxRoom)
             ->orderBy('check_in_at')
             ->pluck('check_in_at')
             ->map(fn($dt) => Carbon::parse($dt)->toDateString())
@@ -140,6 +145,7 @@ class CheckInStatsService
     public static function getTopRankings($limit = 10): array
     {
         return CheckIn::select('wxid')
+            ->where('content', $this->wxRoom)
             ->selectRaw('COUNT(DISTINCT DATE(check_in_at)) as total_days')
             ->groupBy('wxid')
             ->orderByDesc('total_days')

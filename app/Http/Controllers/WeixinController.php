@@ -151,7 +151,7 @@ class WeixinController extends Controller
                 ],
                 ['nickname'=>$remark]
             );
-            $service = new CheckInStatsService($wxid);
+            $service = new CheckInStatsService($wxid,$wxRoom);
             $stats = $service->getStats();
 
             $encourages = [
@@ -181,7 +181,7 @@ class WeixinController extends Controller
             ];
             $randomEncourage = $encourages[array_rand($encourages)];
 
-            $content = "✅微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n卢牧师给你一个大大的赞👍\n{$randomEncourage}";
+            $content = "✅微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
             // $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
             $data = [
                 'type' => 'text',
@@ -191,7 +191,13 @@ class WeixinController extends Controller
                 ]
             ];
             
-            $organization->wxNotify($data);
+            Log::error(__CLASS__,[$checkIn->toArray(),$organization->toArray()]);
+            if($checkIn->wasRecentlyCreated){
+                $organization->wxNotify($data);
+            }else{
+                $data['content'] = "✅挑战成功\n[强]我们再次祝贺 @{$remark}";
+                $organization->wxNotify($data);
+            }
         }
 
         // // 查找或存储用户
