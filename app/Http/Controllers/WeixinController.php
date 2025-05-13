@@ -141,12 +141,15 @@ class WeixinController extends Controller
         }
 
         // 个人或群签到
-
-        
-        if(in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成'])){
+        if($isRoom && in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成'])){
+            $wxRoom = $wxidOrCurrentRoom;
             $checkIn = CheckIn::updateOrCreate(
-                ['wxid'=>$wxid,'check_in_at'=>now()->startOfDay()],
-                ['content'=>$keyword,'nickname'=>$remark]
+                [
+                    'content' => $wxRoom,//在哪个群里打卡的？
+                    'wxid' => $wxid,
+                    'check_in_at' => now()->startOfDay()
+                ],
+                ['nickname'=>$remark]
             );
             $service = new CheckInStatsService($wxid);
             $stats = $service->getStats();
@@ -165,12 +168,12 @@ class WeixinController extends Controller
                 "做一件对自己好的事情吧✅",
                 "有没有感觉自己在发光[太阳]",
                 "大声对自己说：_ _ _ _，今天又是美好的一天✌️",
-                "哼一首你喜欢的乐观向上的歌曲吧🥳"
+                "哼一首你喜欢的乐观向上的歌曲吧🥳",
                 "跳跳舞💃，拍拍手🙌，点点头，给自己点赞",
-                "想象一群人在欢呼庆祝"
-                "在心里对自己说，干得不错👍"
+                "想象一群人在欢呼庆祝",
+                "在心里对自己说，干得不错👍",
                 "深呼吸，打响指",
-                "想象看见烟花在绽放，向上看，做出✌️手势"
+                "想象看见烟花在绽放，向上看，做出✌️手势",
                 "得意的笑，告诉自己，我做到了",
                 "[庆祝][庆祝][庆祝]",
                 "[爆竹][爆竹][爆竹]",
@@ -179,29 +182,16 @@ class WeixinController extends Controller
             $randomEncourage = $encourages[array_rand($encourages)];
 
             $content = "✅微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n卢牧师给你一个大大的赞👍\n{$randomEncourage}";
-
+            // $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
             $data = [
                 'type' => 'text',
-                'to' => $wxid,
+                'to' => $wxRoom,// 发到群里！
                 'data' => [
                     'content' => $content
                 ]
             ];
             
             $organization->wxNotify($data);
-
-            // 发到群里！
-            if(!$isRoom && $checkIn->wasRecentlyCreated){
-                $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
-                 $data = [
-                    'type' => 'text',
-                    'to' => '38796149771@chatroom',
-                    'data' => [
-                        'content' => $content
-                    ]
-                ];
-                $organization->wxNotify($data);
-            }
         }
 
         // // 查找或存储用户

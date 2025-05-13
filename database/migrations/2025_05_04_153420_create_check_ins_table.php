@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('wxid');
             $table->string('nickname');
-            $table->string('content');
+            $table->string('content');//->comment("group")哪个群？
             $table->timestamp('check_in_at')->nullable();
             // 可以重复签到，但updateOrCreate！
             $table->softDeletes();
