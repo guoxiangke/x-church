@@ -143,13 +143,13 @@ class WeixinController extends Controller
         // 个人或群签到
         if($isRoom && in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成'])){
             $wxRoom = $wxidOrCurrentRoom;
-            $checkIn = CheckIn::firstOrCreate(
+            $checkIn = CheckIn::updateOrCreate(
                 [
                     'content' => $wxRoom,//在哪个群里打卡的？
                     'wxid' => $wxid,
                     'check_in_at' => now()->startOfDay()
                 ],
-                ['nickname'=>$remark]
+                ['nickname' => $remark]
             );
             $service = new CheckInStatsService($wxid,$wxRoom);
             $stats = $service->getStats();
@@ -194,7 +194,7 @@ class WeixinController extends Controller
             if($checkIn->wasRecentlyCreated){
                 $organization->wxNotify($data);
             }else{
-                $data['content'] = "✅挑战成功\n[强]我们再次祝贺 @{$remark}";
+                $data['data']['content'] = "✅挑战成功\n[强]我们再次祝贺 @{$remark}";
                 $organization->wxNotify($data);
             }
         }
