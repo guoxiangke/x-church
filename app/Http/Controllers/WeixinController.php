@@ -143,7 +143,7 @@ class WeixinController extends Controller
         // 个人或群签到
         if($isRoom && in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成'])){
             $wxRoom = $wxidOrCurrentRoom;
-            $checkIn = CheckIn::updateOrCreate(
+            $checkIn = CheckIn::firstOrCreate(
                 [
                     'content' => $wxRoom,//在哪个群里打卡的？
                     'wxid' => $wxid,
