@@ -191,7 +191,7 @@ class WeixinController extends Controller
                 ]
             ];
             
-            Log::error(__CLASS__,[$checkIn->toArray(),$organization->toArray()]);
+            Log::error(__CLASS__,[$checkIn->toArray(),$checkIn->wasRecentlyCreated]);
             if($checkIn->wasRecentlyCreated){
                 $organization->wxNotify($data);
             }else{

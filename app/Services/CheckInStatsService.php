@@ -79,7 +79,9 @@ class CheckInStatsService
     public function getTodayRank(): int
     {
         $today = now()->startOfDay();
-        return CheckIn::whereDate('check_in_at', $today)->count();
+        return CheckIn::whereDate('check_in_at', $today)
+            ->where('room', $this->wxRoom)
+            ->count();
     }
 
     // 最大连续打卡天数
@@ -142,9 +144,9 @@ class CheckInStatsService
     }
 
     // 用户总排名（按打卡总数排序）
-    public static function getTopRankings($limit = 10): array
+    public function getTopRankings($limit = 10): array
     {
-        return CheckIn::select('wxid')
+        return CheckIn::select('wxid','nickname')
             ->where('content', $this->wxRoom)
             ->selectRaw('COUNT(DISTINCT DATE(check_in_at)) as total_days')
             ->groupBy('wxid')
