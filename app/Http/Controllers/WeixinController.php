@@ -210,7 +210,7 @@ class WeixinController extends Controller
                     $first = "✅微习惯挑战打卡成功";
                     break;
             }
-            $content = "{$first}\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
+            $content = "{$first}\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n您是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
             // $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
             $data = [
                 'type' => 'text',
