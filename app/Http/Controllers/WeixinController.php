@@ -141,7 +141,7 @@ class WeixinController extends Controller
         }
 
         // 个人或群签到
-        if($isRoom && in_array($keyword,['qd','Qd','签到','dk','Dk','打卡','已读','已看','已听','已完成','报名','bm','Bm'])){
+        if($isRoom && in_array($keyword,['qd','Qd','qiandao','Qiandao','签到','簽到','dk','Dk','Daka','daka','打卡','已读','已看','已讀','已听','已聽','已完成','报名','報名','bm','Bm','baoming','Baoming'])){
             $wxRoom = $wxidOrCurrentRoom;
             $checkIn = CheckIn::updateOrCreate(
                 [
@@ -181,7 +181,36 @@ class WeixinController extends Controller
             ];
             $randomEncourage = $encourages[array_rand($encourages)];
 
-            $content = "✅微习惯挑战打卡成功\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
+            // 'qd','Qd','签到','簽到','dk','Dk','打卡','已读','已看','已讀','已听','已聽','已完成','报名','報名','bm','Bm',
+            switch ($keyword) {
+                case '签到':
+                case 'qd':
+                case 'Qd':
+                case 'Qiandao':
+                case 'qiandao':
+                case '簽到':
+                    $first = "✅签到成功";
+                    break;
+                case '打卡':
+                case 'daka':
+                case 'Daka':
+                case 'dk':
+                case 'Dk':
+                    $first = "✅打卡成功";
+                    break;
+                case '报名':
+                case 'bm':
+                case 'Bm':
+                case 'baoming':
+                case 'Baomming':
+                case '報名':
+                    $first = "✅报名成功";
+                    break;
+                default:
+                    $first = "✅微习惯挑战打卡成功";
+                    break;
+            }
+            $content = "{$first}\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n@{$remark} 你是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
             // $content = "✅挑战成功\n[强]我们一起祝贺 @{$remark}";
             $data = [
                 'type' => 'text',
