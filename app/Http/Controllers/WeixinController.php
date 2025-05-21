@@ -207,7 +207,7 @@ class WeixinController extends Controller
                     $first = "✅报名成功";
                     break;
                 default:
-                    $first = "✅微习惯挑战打卡成功";
+                    $first = "✅挑战成功";
                     break;
             }
             $content = "{$first}\n✊您已连续坚持了 {$stats['current_streak']} 天\n🏅您总共攒了 {$stats['total_days']} 枚🌟\n您是今天第 {$stats['rank']} 个签到的🥇\n给你一个大大的赞👍\n{$randomEncourage}";
@@ -221,9 +221,17 @@ class WeixinController extends Controller
             ];
             
             if($checkIn->wasRecentlyCreated){
+                // 先发给个人，再发到群里！
+                $data['to'] = $wxid;
+                $organization->wxNotify($data);
+
+                $data['to'] = $wxRoom;
+                $data['data']['content'] = '{$first}\n[强]祝贺 @{$remark}\n他是今天第 {$stats['rank']} 位挑战者🥇';
                 $organization->wxNotify($data);
             }else{
-                $data['data']['content'] = "✅挑战成功\n[强]我们再次祝贺 @{$remark}";
+                // 重复打卡，发给个人
+                $data['to'] = $wxid;
+                $data['data']['content'] = "{$first}\n[强]再次祝贺你！无需重复！\n您是今天第 {$stats['rank']} 位挑战者🥇";
                 $organization->wxNotify($data);
             }
         }
