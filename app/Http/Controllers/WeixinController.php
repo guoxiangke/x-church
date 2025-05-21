@@ -229,9 +229,8 @@ class WeixinController extends Controller
                 $data['data']['content'] = "{$first}\n[强]祝贺 @{$remark}\n他是今天第 {$stats['rank']} 位挑战者🥇";
                 $organization->wxNotify($data);
             }else{
-                // 重复打卡，发给个人
-                $data['to'] = $wxid;
-                $data['data']['content'] = "{$first}\n[强]再次祝贺你！无需重复！\n您是今天第 {$stats['rank']} 位挑战者🥇";
+                // 重复打卡时
+                $data['data']['content'] = "✅再次祝贺你！今日您已经挑战过了！";
                 $organization->wxNotify($data);
             }
         }
