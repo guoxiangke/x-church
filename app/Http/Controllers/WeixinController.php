@@ -226,7 +226,7 @@ class WeixinController extends Controller
                 $organization->wxNotify($data);
 
                 $data['to'] = $wxRoom;
-                $data['data']['content'] = "{$first}\n[强]祝贺 @{$remark}\n您是今天第 {$stats['rank']} 位挑战者🥇";
+                $data['data']['content'] = "{$first}\n🥇今天您是第 {$stats['rank']} 位挑战者";
                 $organization->wxNotify($data);
             }else{
                 // 重复打卡时
