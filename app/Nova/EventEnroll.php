@@ -12,6 +12,8 @@ use Laravel\Nova\Fields\BelongsTo;
 class EventEnroll extends Resource
 {
     public static $displayInNavigation = false;
+    public static $perPageOptions = [50,100];
+    public static $perPageViaRelationship = 60;
 
     // 限制 拥有者
     public static function indexQuery(NovaRequest $request, $query)
