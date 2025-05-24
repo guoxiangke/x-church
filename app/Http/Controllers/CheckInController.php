@@ -65,29 +65,29 @@ class CheckInController extends Controller
         // 随机生成6位数字，30s内过期，以便绑定 user1:social1
         $user = auth()->user();
         $user_id = $user->id;
-        // $social = Social::where('user_id', $user_id)->first();
-        // if($user_id == 1){
-        //     // TODO 是否绑定
-        //     $social_id = $social?$social->id:null;
-        //     $isBind = 1;
-        // }else{
-        //     $social = Social::where('user_id', $user_id)->firstOrFail();
-        //     $social_id = $social->id;
-        //     $isBind = $social->wxid;
-        // }
-        // $code6 = '123456';
-        // if(!$isBind) {
-        //     $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
-        //     Cache::put($code6, compact('social_id','organization_id','user_id'), 180);
-        // }
+        $social = Social::where('user_id', $user_id)->first();
+        if($user_id == 1){
+            // TODO 是否绑定
+            $social_id = $social?$social->id:null;
+            $isBind = 1;
+        }else{
+            $social = Social::where('user_id', $user_id)->firstOrFail();
+            $social_id = $social->id;
+            $isBind = $social->wxid;
+        }
+        $code6 = '123456';
+        if(!$isBind) {
+            $code6 = (int) (random_int(1, 3) . substr(now()->valueOf(), -5)) - $user_id%100;
+            Cache::put($code6, compact('social_id','organization_id','user_id'), 180);
+        }
         $organization = $event->organization;
         $isBind = true;
         $data = compact(
             'event',
             'organization',
-            // 'code6',
+            'code6',
             'isBind',
-            // 'social',//?
+            'social',//?
         );
 
         $eventEnroll = EventEnroll::firstWhere([
