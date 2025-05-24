@@ -17,8 +17,7 @@
 		            </div>
 		            @endif
 		        </div>
-			        @if(false
-			        	&& ($event->is_need_telephone || $event->is_need_name))
+			        @if($event->is_need_telephone || $event->is_need_name)
 			        	<livewire:social-telephone-update :social="$social" :event="$event"/>
 			        @endif
 				<div class="weui-msg__text-area">
