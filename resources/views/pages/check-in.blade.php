@@ -18,7 +18,9 @@
 		            @endif
 		        </div>
 			        @if($event->is_need_telephone || $event->is_need_name)
+			        	@if(!($social->nickname && $social->telephone))
 			        	<livewire:social-telephone-update :social="$social" :event="$event"/>
+			        	@endif
 			        @endif
 				<div class="weui-msg__text-area">
 			        @if(!$isBind)

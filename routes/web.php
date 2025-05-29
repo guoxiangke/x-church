@@ -12,6 +12,7 @@ use App\Http\Livewire\PageEventHelperByEnrollment;
 use App\Http\Livewire\PageEventHelperByContact;
 use App\Models\Contact;
 use App\Models\User;
+use App\Models\Social;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -55,19 +56,20 @@ Route::get('/auth/callback', function () {
     // 获取用户信息，存储用户、登陆、然后再次跳转。
     $socialUser = Socialite::driver('laravelpassport')->user();//stateless()
     // dd($socialUser);
-    $socialUser = $socialUser->user;
+    $socialUser = $socialUser->user;//Array
     $avatar = $socialUser['avatar'];
     $socialEmail = $socialUser['email'];
     $wxid = $socialUser['wxid'];
-    // 如果已登陆
+    $socialType = 0;//weixin
+    $name = $socialUser['nickname'] ?: $socialUser['name'];
     if($user = Auth::user()){
-        // 执行绑定！
+        //用户已登录，执行绑定！
     }else{
         // 未登录，执行登录！
         $user = User::whereMeta('wxid', $wxid)->first()?:User::where('email', $socialEmail)->first();
         if(!$user){
             $user = User::create([
-                'name' => $socialUser['nickname'],
+                'name' => $name,
                 'email' => $socialEmail,
                 'email_verified_at' => now(),
                 'password' => Hash::make(Str::random(8)),
@@ -76,13 +78,30 @@ Route::get('/auth/callback', function () {
             ]);
         }
         $user->setMeta('wxid', $wxid);
+
         //执行登录！
         Auth::loginUsingId($user->id, true);//自动登入！
     }
+    // 
     $user->update([
-        'name' => $socialUser['nickname'],
+        // 'name' => $name,//$socialUser['nickname'],
         'profile_photo_path' => $avatar,
     ]);
+
+    // 执行绑定！
+    $social = Social::firstOrCreate([
+        'social_id' => $wxid,
+        'user_id'   => $user->id,
+        'type'      => $socialType,
+    ]);
+    //
+    if($social->updated_at->diffInDays(now()) > 1) {
+        // $social->name = $name;
+        $social->avatar = $avatar;
+        if($social->isDirty()){
+            $social->save();
+        }
+    }
     return Redirect::intended('dashboard');
 });
 

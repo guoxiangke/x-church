@@ -24,11 +24,12 @@ use Cookie;
 class WeixinController extends Controller
 {
     // 如果绑定过，取出userID, 自动登录，否则 执行绑定过程
-    public function bindOrlogin($socialUser, $type)
+    public function _to_delete_bindOrlogin($socialUser, $type)
     {
         $loginedId = Auth::id();
         // $avatar = Str::replaceFirst('http://', 'https://', $socialUser->avatar);
         $avatar = $socialUser->avatar;
+        dd($loginedId, $socialUser);
         if($loginedId){
             //用户已登录，执行绑定！
             $social = Social::firstOrCreate([
