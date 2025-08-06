@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
 use Cookie;
+use Carbon\Carbon;
 
 
 class WeixinController extends Controller
