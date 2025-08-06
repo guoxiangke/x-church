@@ -12,6 +12,7 @@ use App\Models\Event;
 use App\Models\CheckIn;
 use App\Services\Xbot;
 use App\Services\CheckInStatsService;
+use App\Services\GlobalCheckInStatsService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -236,6 +237,144 @@ class WeixinController extends Controller
             }
         }
 
+        if($isRoom && $keyword=='打卡排行'){
+            $service = new GlobalCheckInStatsService('your_wx_room_id');
+            // 获取总打卡天数排行榜
+            $totalRanking = $service->getTotalDaysRanking(10);
+            // 获取当前连续打卡天数排行榜  
+            $streakRanking = $service->getCurrentStreakRanking(10);
+            // 构建总打卡天数排行榜文本
+            $textTotalRanking = "📊 总打卡天数排行榜 TOP10\n";
+            $textTotalRanking .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+            
+            if (empty($totalRanking)) {
+                $textTotalRanking .= "暂无打卡记录\n";
+            } else {
+                foreach ($totalRanking as $user) {
+                    $rankIcon = $this->getRankIcon($user['rank']);
+                    $textTotalRanking .= sprintf(
+                        "%s %s %s (%d天)\n", 
+                        $rankIcon, 
+                        $user['rank'], 
+                        $user['nickname'], 
+                        $user['total_days']
+                    );
+                }
+            }
+            
+            // 构建连续打卡天数排行榜文本
+            $textStreakRanking = "\n🔥 连续打卡天数排行榜 TOP10\n";
+            $textStreakRanking .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+            
+            if (empty($streakRanking)) {
+                $textStreakRanking .= "暂无连续打卡记录\n";
+            } else {
+                foreach ($streakRanking as $user) {
+                    $rankIcon = $this->getRankIcon($user['rank']);
+                    $streakText = $user['current_streak'] == 1 ? "1天" : "{$user['current_streak']}天连击";
+                    $textStreakRanking .= sprintf(
+                        "%s %s %s (%s)\n", 
+                        $rankIcon, 
+                        $user['rank'], 
+                        $user['nickname'], 
+                        $streakText
+                    );
+                }
+            }
+            
+            // 合并两个排行榜
+            $finalText = $textTotalRanking . $textStreakRanking;
+            
+            // 添加底部提示
+            $finalText .= "\n💡 发送「我的打卡」查看个人统计";
+            
+            // 发送排行榜消息
+            $data = [
+                'type' => 'text',
+                'to' => $wxRoom,// 发到群里！
+                'data' => [
+                    'content' => $finalText
+                ]
+            ];
+            $organization->wxNotify($data);
+
+            // return $finalText; 或者直接发送消息
+        }
+
+        if($isRoom && $keyword=='我的打卡'){
+            $service = new CheckInStatsService($wxid, $wxRoom);
+            $stats = $service->getStats();
+            
+            // 如果没有打卡记录
+            if ($stats['total_days'] == 0) {
+                $text = "📝 您的打卡统计\n";
+                $text .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+                $text .= "还没有打卡记录哦～\n";
+                $text .= "发送「打卡」开始您的第一次打卡吧！";
+                // return $text;
+            } else {
+                // 构建个人统计文本
+                $text = "📝 您的打卡统计\n";
+                $text .= "━━━━━━━━━━━━━━━━━━━━━━\n";
+                
+                // 基本统计
+                $text .= sprintf("📅 总打卡天数：%d天\n", $stats['total_days']);
+                $text .= sprintf("🔥 当前连续：%d天\n", $stats['current_streak']);
+                $text .= sprintf("🏆 最高连击：%d天\n", $stats['max_streak']);
+                
+                // 今日排名
+                if ($stats['rank'] > 0) {
+                    $text .= sprintf("⏰ 今日第%d个打卡\n", $stats['rank']);
+                }
+                
+                // 缺勤统计
+                if ($stats['missed_days'] > 0) {
+                    $text .= sprintf("😴 缺勤天数：%d天 (%.1f%%)\n", 
+                        $stats['missed_days'], 
+                        floatval($stats['missed_percentage'])
+                    );
+                } else {
+                    $text .= "😴 缺勤天数：0天 (全勤！)\n";
+                }
+                
+                // 打卡状态评语
+                $text .= "\n" . $this->getStatusComment($stats) . "\n";
+                
+                // 显示最近缺勤日期（如果有且不超过5个）
+                if (!empty($stats['missed_dates']) && count($stats['missed_dates']) <= 5) {
+                    $text .= "\n📋 缺勤日期：\n";
+                    foreach ($stats['missed_dates'] as $missedDate) {
+                        $text .= "• " . Carbon::parse($missedDate)->format('m月d日') . "\n";
+                    }
+                } elseif (count($stats['missed_dates']) > 5) {
+                    $text .= sprintf("\n📋 共缺勤%d天（最近5次）：\n", count($stats['missed_dates']));
+                    $recentMissed = array_slice($stats['missed_dates'], -5);
+                    foreach ($recentMissed as $missedDate) {
+                        $text .= "• " . Carbon::parse($missedDate)->format('m月d日') . "\n";
+                    }
+                }
+                
+                // 底部提示
+                $text .= "\n💡 发送「打卡排行」查看群组排名";
+            }
+            
+            // 发送个人统计消息
+            $data = [
+                'type' => 'text',
+                'to' => $wxRoom,// 发到群里！
+                'data' => [
+                    'content' => '📅 统计已单独发您微信。'
+                ]
+            ];
+            $organization->wxNotify($data);
+            
+            // 先发给个人，再发到群里！
+            $data['to'] = $wxid;
+            $data['data']['content'] = $text;
+            $organization->wxNotify($data);
+        }
+
+
         // // 查找或存储用户
         // $customer = Social::first(['wxid'=> $wxid]); // "wxid":"bluesky_still","remark":"AI天空蔚蓝"
 
@@ -249,4 +388,40 @@ class WeixinController extends Controller
 
     }
     
+    // 辅助方法：根据统计数据生成状态评语
+    private function getStatusComment($stats) {
+        $currentStreak = $stats['current_streak'];
+        $maxStreak = $stats['max_streak'];
+        $missedPercentage = floatval($stats['missed_percentage']);
+        
+        // 连续天数评语
+        if ($currentStreak >= 30) {
+            $streakComment = "🌟 坚持王者！连续打卡超过30天！";
+        } elseif ($currentStreak >= 14) {
+            $streakComment = "🚀 习惯养成中！连续打卡超过2周！";
+        } elseif ($currentStreak >= 7) {
+            $streakComment = "📈 状态不错！连续打卡1周了！";
+        } elseif ($currentStreak >= 3) {
+            $streakComment = "💪 继续加油！保持连续打卡！";
+        } elseif ($currentStreak >= 1) {
+            $streakComment = "🌱 刚刚开始，加油坚持！";
+        } else {
+            $streakComment = "😴 今天还没打卡哦~";
+        }
+        
+        // 出勤率评语
+        if ($missedPercentage == 0) {
+            $attendanceComment = "完美全勤！";
+        } elseif ($missedPercentage <= 10) {
+            $attendanceComment = "出勤率很棒！";
+        } elseif ($missedPercentage <= 20) {
+            $attendanceComment = "出勤率良好~";
+        } elseif ($missedPercentage <= 30) {
+            $attendanceComment = "还有提升空间哦~";
+        } else {
+            $attendanceComment = "要更加努力坚持打卡！";
+        }
+        
+        return $streakComment . " " . $attendanceComment;
+    }
 }
