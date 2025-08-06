@@ -426,4 +426,18 @@ class WeixinController extends Controller
         
         return $streakComment . " " . $attendanceComment;
     }
+
+    // 辅助方法：获取排名图标
+    private function getRankIcon($rank) {
+        switch ($rank) {
+            case 1:
+                return '🥇';
+            case 2:
+                return '🥈';
+            case 3:
+                return '🥉';
+            default:
+                return '🏅';
+        }
+    }
 }

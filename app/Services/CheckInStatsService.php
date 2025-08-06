@@ -142,17 +142,4 @@ class CheckInStatsService
 
         return $missedDates->all();
     }
-
-    // 用户总排名（按打卡总数排序）
-    public function getTopRankings($limit = 10): array
-    {
-        return CheckIn::select('wxid','nickname')
-            ->where('content', $this->wxRoom)
-            ->selectRaw('COUNT(DISTINCT DATE(check_in_at)) as total_days')
-            ->groupBy('wxid')
-            ->orderByDesc('total_days')
-            ->limit($limit)
-            ->get()
-            ->toArray();
-    }
 }
