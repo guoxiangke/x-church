@@ -239,7 +239,7 @@ class WeixinController extends Controller
 
         if($isRoom && $keyword=='打卡排行'){
             $wxRoom = $wxidOrCurrentRoom;
-            $service = new GlobalCheckInStatsService('your_wx_room_id');
+            $service = new GlobalCheckInStatsService($wxRoom);
             // 获取总打卡天数排行榜
             $totalRanking = $service->getTotalDaysRanking(10);
             // 获取当前连续打卡天数排行榜  
