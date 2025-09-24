@@ -149,6 +149,8 @@ Route::get('/devotional', function () {
     // https://github.com/mtvs/eloquent-hashids
     // Route::get('/s/{service:hashid}',  [CheckInController::class, 'serviceCheck'])->name('service.checkin');
     Route::get('/e/{event:hashid}',  [CheckInController::class, 'eventCheck'])->name('event.checkin');
+
+    Route::get('/e/status/{eventEnroll}',  [EventEnrollController::class, 'status'])->name('event.status');
     
     // 报名人数更新 /event_enrolls/{{$enrollId}}/update
     Route::get('/event_enrolls/{eventEnroll}/counts', [EventEnrollController::class, 'counts'])->name('event_enrolls.counts');

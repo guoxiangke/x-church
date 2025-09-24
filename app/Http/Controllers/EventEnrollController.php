@@ -18,6 +18,34 @@ class EventEnrollController extends Controller
     {
          return view('cancel-double-check', compact('eventEnroll'));
     }
+
+    public function status(EventEnroll $eventEnroll)
+    {
+        $userId = $eventEnroll->user_id;
+        $serviceId = $eventEnroll->event->service_id;
+
+        $results = EventEnroll::join('events', 'event_enrolls.event_id', '=', 'events.id')
+            ->where('event_enrolls.user_id', $userId)
+            ->where('events.service_id', $serviceId)
+            ->whereNotNull('event_enrolls.checked_in_at')
+            ->select('event_enrolls.*', 'events.name as event_name', 'events.begin_at as event_begin_at')
+            ->orderBy('events.begin_at', 'desc')
+            ->get();
+
+        $userName = $eventEnroll->user->name;
+        $attendanceCount = $results->count();
+        $eventNames = $results->pluck('event_name')->toArray();
+
+        $output = "用户名：{$userName}\n";
+        $output .= "出勤次数：{$attendanceCount}\n";
+        $output .= "分别是：\n";
+        
+        foreach ($eventNames as $eventName) {
+            $output .= "  \"{$eventName}\",\n";
+        }
+
+        return response($output, 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+    }
     /**
      * Display a listing of the resource.
      *
