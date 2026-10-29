@@ -12,6 +12,13 @@ use App\Models\User;
 // 扫码签到的判定逻辑：网页（微信扫码）和 app 接口共用
 class CheckInService
 {
+    // 签到码不在微信里打开、又没登录（系统相机扫、没装永不止息 app）：微信网页
+    // 授权在别的浏览器里用不了，/e/、/s/ 都直接去 app 下载页
+    public static function shouldGoAppDownload(\Illuminate\Http\Request $request): bool
+    {
+        return ! auth()->check() && ! str_contains((string) $request->userAgent(), 'MicroMessenger');
+    }
+
     //$service 一定是周期性的，rrule为必选项
     // 取当前这一场 event，没有、或已结束且不是当天时，按 rrule 新建
     public static function currentEvent(Service $service): Event

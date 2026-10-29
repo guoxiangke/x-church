@@ -46,6 +46,8 @@ return [
     // 永不止息 app 签发签到票据（HS256）的共享密钥，与 worker 的 XCHURCH_TICKET_SECRET 一致
     'ybzx' => [
         'ticket_secret' => env('YBZX_TICKET_SECRET'),
+        // 不在微信里打开签到码时跳去的 app 下载页
+        'download_url' => env('YBZX_DOWNLOAD_URL', 'https://app.51chat.net'),
     ],
 
     'laravelpassport' => [

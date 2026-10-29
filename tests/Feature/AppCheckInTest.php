@@ -209,6 +209,32 @@ class AppCheckInTest extends TestCase
         $this->assertNotNull(EventEnroll::firstWhere(['user_id' => $user->id, 'event_id' => $event->id])->checked_in_at);
     }
 
+    // 系统相机扫码、没装 app：Safari 里微信网页授权用不了，直接去 app 下载页
+    public function test_not_in_wechat_goes_to_app_download()
+    {
+        $event = $this->makeEvent();
+        $safari = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1';
+        $wechat = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.50(0x1800322d) NetType/WIFI Language/zh_CN';
+
+        $this->withHeader('User-Agent', $safari)->get(route('event.checkin', $event->hashid))
+            ->assertRedirect('https://app.51chat.net');
+        // /s/ 也直接去下载页，不生成新的一场
+        $count = Event::count();
+        $this->withHeader('User-Agent', $safari)->get(route('service.checkin', $event->service->hashid))
+            ->assertRedirect('https://app.51chat.net');
+        $this->assertSame($count, Event::count());
+        // 微信里的 /s/ 照旧跳到这一场的 /e/
+        $this->withHeader('User-Agent', $wechat)->get(route('service.checkin', $event->service->hashid))
+            ->assertRedirect(route('event.checkin', $event->hashid));
+
+        // 微信里照旧去登录（走微信授权）
+        $this->withHeader('User-Agent', $wechat)->get(route('event.checkin', $event->hashid))
+            ->assertRedirect(route('login'));
+        // 别的要登录的页面不受影响
+        $this->withHeader('User-Agent', $safari)->get('/dashboard')
+            ->assertRedirect(route('login'));
+    }
+
     public function test_well_known_files_for_app_links()
     {
         $this->get('/.well-known/apple-app-site-association')
