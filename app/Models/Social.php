@@ -31,8 +31,10 @@ class Social extends Model
     const TYPE_GITHUB = 2;
     // A person is assigned a unique page-scoped ID (PSID) for each Facebook Page they start a conversation with. The PSID is used by your Messenger bot to identify a person when sending messages.
     const TYPE_FB_PSID = 3;
+    // 永不止息 app 的设备用户，social_id 是 app 的 uid
+    const TYPE_APP = 4;
 
-    const TYPES = ['微信', 'Github', 'Facebook', 'PSID'];
+    const TYPES = ['微信', 'Github', 'Facebook', 'PSID', 'App'];
 
     public function user(){
         return $this->belongsTo(User::Class);

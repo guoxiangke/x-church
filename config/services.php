@@ -43,6 +43,11 @@ return [
         'token' => env('XBOT_TOKEN'),
     ],
 
+    // 永不止息 app 签发签到票据（HS256）的共享密钥，与 worker 的 XCHURCH_TICKET_SECRET 一致
+    'ybzx' => [
+        'ticket_secret' => env('YBZX_TICKET_SECRET'),
+    ],
+
     'laravelpassport' => [
       'client_id' => env('LARAVELPASSPORT_CLIENT_ID'),  
       'client_secret' => env('LARAVELPASSPORT_CLIENT_SECRET'),  

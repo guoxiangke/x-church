@@ -27,6 +27,32 @@ use App\Models\Social;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// 永不止息 app 的 Universal Links / App Links：系统相机扫 /e/、/s/ 签到码时直接打开 app
+Route::get('/.well-known/apple-app-site-association', function () {
+    return response()->json([
+        'applinks' => [
+            'apps' => [],
+            'details' => [[
+                'appID' => 'L833M8JQWM.app.yongbuzhixi.com',
+                'appIDs' => ['L833M8JQWM.app.yongbuzhixi.com'],
+                'paths' => ['/e/*', '/s/*'],
+                'components' => [['/' => '/e/*'], ['/' => '/s/*']],
+            ]],
+        ],
+    ]);
+});
+Route::get('/.well-known/assetlinks.json', function () {
+    return response()->json([[
+        'relation' => ['delegate_permission/common.handle_all_urls'],
+        'target' => [
+            'namespace' => 'android_app',
+            'package_name' => 'app.yongbuzhixi.com',
+            // 正式签名（CN=Liangyou Lingting）的 SHA-256
+            'sha256_cert_fingerprints' => ['37:9B:11:E3:B5:EC:ED:67:A1:D9:08:32:DD:93:B0:C2:AF:2E:07:7C:48:66:2E:86:AE:41:22:A7:4B:C7:7C:65'],
+        ],
+    ]]);
+});
 Route::get('/weui/success', function () {
     return view('weui.success');
 });
