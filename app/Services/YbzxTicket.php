@@ -11,7 +11,17 @@ class YbzxTicket
     // 验证通过返回 payload（sub 为 app 的 uid），否则返回 null
     public static function verify(string $ticket): ?array
     {
-        $secret = config('services.ybzx.ticket_secret');
+        return self::check($ticket, (string) config('services.ybzx.ticket_secret'), 'x-church', 'ybzx-ticket:');
+    }
+
+    // App 内网页自动登录（/sso，2026-11-09）：另一把密钥，aud 是本站域名
+    public static function verifySso(string $ticket, string $host): ?array
+    {
+        return self::check($ticket, (string) config('services.ybzx.sso_secret'), strtolower($host), 'ybzx-sso:');
+    }
+
+    protected static function check(string $ticket, string $secret, string $aud, string $replayKey): ?array
+    {
         if (!$secret) return null;
 
         $parts = explode('.', $ticket);
@@ -26,7 +36,7 @@ class YbzxTicket
 
         $payload = json_decode(self::base64UrlDecode($payload64), true);
         if (!is_array($payload)) return null;
-        if (($payload['iss'] ?? null) !== 'ybzx' || ($payload['aud'] ?? null) !== 'x-church') return null;
+        if (($payload['iss'] ?? null) !== 'ybzx' || ($payload['aud'] ?? null) !== $aud) return null;
 
         $now = time();
         $exp = (int) ($payload['exp'] ?? 0);
@@ -34,7 +44,7 @@ class YbzxTicket
         if (empty($payload['sub']) || empty($payload['jti'])) return null;
 
         // 防重放：同一张票只能用一次
-        if (!Cache::add('ybzx-ticket:' . $payload['jti'], 1, $exp - $now + 60)) return null;
+        if (!Cache::add($replayKey . $payload['jti'], 1, $exp - $now + 60)) return null;
 
         return $payload;
     }

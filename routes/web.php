@@ -24,6 +24,9 @@ use App\Models\Social;
 |
 */
 
+// App 内网页自动登录（2026-11-09），见 SsoController
+Route::post('/sso', \App\Http\Controllers\SsoController::class)->middleware('throttle:30,1')->name('sso');
+
 Route::get('/', function () {
     return view('welcome');
 });

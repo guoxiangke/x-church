@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        // App 内网页自动登录：票据本身就是凭证，App 直接 POST 过来没有 CSRF token
+        'sso',
     ];
 }
