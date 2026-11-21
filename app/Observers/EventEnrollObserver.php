@@ -28,21 +28,21 @@ class EventEnrollObserver
 
             $content = $eventEnroll->event->name."\n新增1人报名：".$eventEnroll->user->name."\n当前成人：".$eventEnrolls->sum('count_adult')."\n当前儿童：".$eventEnrolls->sum('count_child') ."\n当前时间：".now('America/Los_Angeles')->format('m/d H:i');
 
-            $res = Http::withHeaders([
-                'Authorization' => 'Bearer '. config('services.sms.token'),
-                'Content-Type' => 'application/json',
-            ])->post(config('services.sms.endpoint'), [
-                'phoneNumber' => $organization->telephone,
-                'message' => $content,
-            ]);
-            Http::withHeaders([
-                'Authorization' => 'Bearer '. config('services.xbot.token'),
-                'Content-Type' => 'application/json',
-            ])->post(config('services.xbot.endpoint'), [
-                 "type" => "text",
-                 "to" => "57658694967@chatroom", //微信通知250402
-                 'data' => compact('content'),
-            ]);
+            // $res = Http::withHeaders([
+            //     'Authorization' => 'Bearer '. config('services.sms.token'),
+            //     'Content-Type' => 'application/json',
+            // ])->post(config('services.sms.endpoint'), [
+            //     'phoneNumber' => $organization->telephone,
+            //     'message' => $content,
+            // ]);
+            // Http::withHeaders([
+            //     'Authorization' => 'Bearer '. config('services.xbot.token'),
+            //     'Content-Type' => 'application/json',
+            // ])->post(config('services.xbot.endpoint'), [
+            //      "type" => "text",
+            //      "to" => "57658694967@chatroom", //微信通知250402
+            //      'data' => compact('content'),
+            // ]);
         }
     }
 
